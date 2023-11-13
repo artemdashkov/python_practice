@@ -1,3 +1,7 @@
+https://sites.google.com/chromium.org/driver/downloads
+	-ссылка на драйвер для chrome
+
+
 pip3 freeze > requirements.txt
 	-создает в папке venv файл requirements.txt с перечнем всех исользуемых в проекте библиотек
 	
@@ -15,9 +19,6 @@ pip3 install selenium==4.*
 pip3 list
 	-перечень всех установленных библиотек
 	
-https://sites.google.com/chromium.org/driver/downloads
-	-ссылка на драйвер для chrome
-
 # webdriver это и есть набор команд для управления браузером
 from selenium import webdriver
 
