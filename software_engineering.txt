@@ -1,0 +1,15 @@
+Transformers
+Transformers provides APIs and tools to easily download and train state-of-the-art pretrained models. Using pretrained models can reduce your compute costs, carbon footprint, and save you the time and resources required to train a model from scratch.
+
+======Install======
+	pip install transformers datasets
+	pip install torch
+	pip install tensorflow
+
+Пример использования:
+from transformers import pipeline
+
+classifier = pipeline("sentiment-analysis",
+                      "blanchefort/rubert-base-cased-sentiment")
+
+print(classifier("Я обожаю инженерию машинного обучения!"))
