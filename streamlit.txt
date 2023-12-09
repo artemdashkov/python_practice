@@ -1,0 +1,5 @@
+установка пакета
+	pip install streamlit
+	
+запуск приложения
+	streamlit run your_script.py
