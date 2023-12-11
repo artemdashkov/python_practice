@@ -1,0 +1,29 @@
+pip install fastapi
+	-установка библиотеки FastAPI
+
+pip install uvicorn
+	-установка веб-сервера
+
+=====Приложение на FastAPI=====
+from fastapi import FastAPI
+
+app = FastAPI()
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
+	
+где:
+	@ — символ, говорящий о том, что далее указывается декоратор.
+	app — имя переменной объекта FastAPI, который будет использоваться для обработки запросов API.
+	get — название метода HTTP, который будет использоваться.
+	("/") — путь к запрашиваемому ресурсу.
+
+
+uvicorn main:app
+	-запуск приложения в терминале
+	
+где:
+	uvicorn —команда для запуска веб-сервер Uvicorn.
+	main —название Python файла с приложением FastAPI.
+	app —название переменной FastAPI из файла main.py
+
