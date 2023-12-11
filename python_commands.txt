@@ -19,7 +19,8 @@ apt install python3
 	# <полный путь к файлу скрипта>	-С указанием интерпретатора в начале скрипта
 	# /usr/bin/python3 <полный путь к файлу скрипта>	-Без указания интерпретатора в начале скрипта
 
-pip - система управления пакетами или менеджера пакетов (Python Package Index)
+======pip======
+ - система управления пакетами или менеджера пакетов (Python Package Index)
 
 # apt install python3-pip
 	-установка pip в линуксе
@@ -34,12 +35,53 @@ pip - система управления пакетами или менедже
 	download	скачать пакет и зависимости (без установки)
 	list		вывести список установленных пакетов
 
+pip install -r requirements.txt
+	установка зависимостей
+	
+pip freeze
+	просмотр зависимостей
 
-# apt install python3-venv
-	-установка пакета venv
+pip freeze > requirements.txt
+	все зависимости скопировать в файл requirements.txt
+	
+
+======poetry======
+Установка Windows (Powershell)
+	официальная документация https://python-poetry.org/docs/#installing-with-the-official-installer
+	в powershell: (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | py -
+	pip install poetry
+	
+poetry --version
+	Poetry (version 1.7.1)
+
+poetry config --list
+	перечень настроек poetry
+
+Установка зависимостей
+	poetry install 	# для первичной установки
+	poetry update 	# для обновления
+	
+poetry show --tree
+	показать зависимости
+	
+poetry shell
+	создать и активировать виртуальное окружение одной командой
+	
+
+======РАБОТА С ВИРТУАЛЬНЫМ ОКРУЖЕНИЕМ======
+apt install python3-venv
+	-(команда линукс)установка пакета venv
 
 python3 -m venv myenv
+или
+python -m venv myenv
 	-создать новое окружение, где myenv имя вирутального окружения. После выполнения команды будет создана папка с именем myenv, содержащая все необходимые файлы для виртуального окружения.
+
+python -m venv virt_name
+
+pip install virtualenv
+	установка virtualenv, требуется для python	
+
 
 bin include lib lib64 pyvenv.cfg share
 	-посмотреть содержимое виртуального окружения
@@ -57,4 +99,3 @@ deactivate
 	-используется для удаления виртуальной среды
 
 exit()
-	-
