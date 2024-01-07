@@ -1,7 +1,6 @@
 https://sites.google.com/chromium.org/driver/downloads
 	-ссылка на драйвер для chrome
 
-
 pip3 freeze > requirements.txt
 	-создает в папке venv файл requirements.txt с перечнем всех исользуемых в проекте библиотек
 	
