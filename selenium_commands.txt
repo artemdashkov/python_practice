@@ -8,8 +8,9 @@ python -m venv selenium_env
 selenium_env\Scripts\activate.bat
 	Запустим созданный для нас приложением venv файл activate.bat, чтобы активировать окружение:
 	
-pip3 install selenium==4.*
-	-установка selenium
+pip3 install selenium webdriver-manager
+	-установка selenium и webdriver-manager (позволяет автоматически скачивать самую актуальную версию драйвера для того или иного браузера, без каких-либо дополнительных скачиваний)
+
 	
 pip3 list
 	-перечень всех установленных библиотек
@@ -17,9 +18,15 @@ pip3 list
 pip3 freeze > requirements.txt
 	-создает в папке venv файл requirements.txt с перечнем всех исользуемых в проекте библиотек
 
+from selenium import webdriver
+	webdriver это и есть набор команд для управления браузером
 
+from webdriver_manager.chrome import ChromeDriverManager
+	драйвер для хром
 
-from selenium import webdriver		# webdriver это и есть набор команд для управления браузером
+from selenium.webdriver.chrome.service import Service
+	класс Service отвечает за установку драйвера, за его открытие и его закрытие 
+
 
 from selenium.webdriver.common.by import By		# импортируем класс By, который позволяет выбрать способ поиска элемента
 

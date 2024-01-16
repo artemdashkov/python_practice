@@ -1,0 +1,15 @@
+Разница между:
+	element_is_visible
+	element_is_clickable
+	element_to_be_clickable
+	element_is_present
+	presence_of_element_located
+	presence_of_all_elements_located
+	visibility_of_element_located
+	
+	
+	find_element
+	find_elements
+	
+	get_attribute
+	get_property
