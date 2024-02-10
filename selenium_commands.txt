@@ -1,7 +1,7 @@
-https://sites.google.com/chromium.org/driver/downloads
-	-ссылка на драйвер для chrome
-	
 ===========ПОДГОТОВКА СРЕДЫ / УСТАНОВКА ПАКЕТОВ===========
+https://sites.google.com/chromium.org/driver/downloads
+	ссылка на драйвер для chrome
+
 python -m venv selenium_env
 	Создадим виртуальное окружение selenium_env:
 
@@ -10,7 +10,6 @@ selenium_env\Scripts\activate.bat
 	
 pip3 install selenium webdriver-manager
 	-установка selenium и webdriver-manager (позволяет автоматически скачивать самую актуальную версию драйвера для того или иного браузера, без каких-либо дополнительных скачиваний)
-
 	
 pip3 list
 	-перечень всех установленных библиотек
@@ -18,23 +17,23 @@ pip3 list
 pip3 freeze > requirements.txt
 	-создает в папке venv файл requirements.txt с перечнем всех исользуемых в проекте библиотек
 
-from selenium import webdriver
-	webdriver это и есть набор команд для управления браузером
-
-from webdriver_manager.chrome import ChromeDriverManager
-	драйвер для хром
-
-from selenium.webdriver.chrome.service import Service
-	класс Service отвечает за установку драйвера, за его открытие и его закрытие 
-
-
+===========ИМПОРТЫ / КЛАССЫ===========
+from selenium import webdriver		# webdriver это и есть набор команд для управления браузером
+from webdriver_manager.chrome import ChromeDriverManager	# драйвер для хром
+from selenium.webdriver.chrome.service import Service	# класс Service отвечает за установку драйвера, за его открытие и его закрытие 
 from selenium.webdriver.common.by import By		# импортируем класс By, который позволяет выбрать способ поиска элемента
+import time
 
-driver = webdriver.Chrome()			# инициализируем драйвер браузера. После этой команды вы должны увидеть новое открытое окно браузера
 
-driver.get("https://suninjuly.github.io/text_input_task.html")		# Метод get сообщает браузеру, что нужно открыть сайт по указанной ссылке
+===========МЕТОДЫ===========
+driver = webdriver.Chrome()
+	инициализируем драйвер браузера. После этой команды вы должны увидеть новое открытое окно браузера
 
-textarea = driver.find_element(By.CSS_SELECTOR, ".textarea")		# Ищем поле для ввода текста
+driver.get("https://suninjuly.github.io/text_input_task.html")
+	Метод get сообщает браузеру, что нужно открыть сайт по указанной ссылке
+
+textarea = driver.find_element(By.CSS_SELECTOR, ".textarea")
+	Ищем поле для ввода текста. Метод find_element позволяет найти нужный элемент на сайте, указав путь к нему. Метод принимает в качестве аргументов способ поиска и значение, по которому мы будем искать
 
 textarea.send_keys("get()")			# Напишем текст ответа в найденное поле
 
@@ -120,10 +119,10 @@ Explicit Waits (WebDriverWait и expected_conditions)
 
 ===========Поиск элементов с помощью Selenium===========
 Для поиска элементов на странице в Selenium WebDriver используются несколько стратегий, позволяющих искать:
-- по атрибутам элементов,
-- текстам в ссылках,
-- CSS-селекторам 
-- XPath-селекторам. 
+	- по атрибутам или тегам элементов: ID, class, и т.д.
+	- текстам в ссылках,
+	- CSS-селекторам - Поиск с помощью CSS-селекторов, является наиболее удобным способом, т.к. он покрывает практически все возможные ситуации, и CSS-селекторы выглядят более читабельными.
+	- XPath-селекторам. 
 
 Для поиска Selenium предоставляет метод find_element, который принимает два аргумента:
 1. тип локатора
