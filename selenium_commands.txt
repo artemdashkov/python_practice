@@ -214,6 +214,8 @@ Explicit Waits (WebDriverWait и expected_conditions)
 		alert_is_present
 
 
+===========ТИПЫ ОШИБОК===========
+NoSuchElementException	-отсутствет элемент на странице
 
 
 
