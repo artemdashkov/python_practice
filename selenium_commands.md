@@ -258,7 +258,7 @@ import os
 
 # Ожидания
 
-## Неявные ожидания Selenium Waits (Implicit Waits)
+## Неявные ожидания - Selenium Waits (Implicit Waits)
 Решение с time.sleep() плохое: оно не масштабируемое и трудно поддерживаемое.
 
 Идеальное решение могло бы быть таким: нам всё равно надо избежать ложного падения тестов из-за асинхронной работы скриптов или задержек от сервера, поэтому мы будем ждать появление элемента на странице в течение заданного количества времени (например, 5 секунд). Проверять наличие элемента будем каждые 500 мс. Как только элемент будет найден, мы сразу перейдем к следующему шагу в тесте. Таким образом, мы сможем получить нужный элемент в идеальном случае сразу, в худшем случае за 5 секунд.
@@ -278,46 +278,66 @@ browser.get("http://suninjuly.github.io/wait1.html")
 ```
 Теперь мы можем быть уверены, что при небольших задержках в работе сайта наши тесты продолжат работать стабильно. На каждый вызов команды find_element WebDriver будет ждать 5 секунд до появления элемента на странице прежде, чем выбросить исключение NoSuchElementException.
 
+## Явное ожидание - Explicit Waits (WebDriverWait и expected_conditions)
 
+Методы **find_element** проверяют только то, что элемент появился на странице. В то же время элемент может иметь дополнительные свойства, которые могут быть важны для наших тестов, например:
+
+- Кнопка может быть неактивной, то есть её нельзя кликнуть;
+- Кнопка может содержать текст, который меняется в зависимости от действий пользователя. Например, текст "Отправить" после нажатия кнопки поменяется на "Отправлено";
+- Кнопка может быть перекрыта каким-то другим элементом или быть невидимой.
 
 Explicit Waits (WebDriverWait и expected_conditions)
-Чтобы тест был надежным, нам нужно не только найти кнопку на странице, но и дождаться, когда кнопка станет кликабельной. Для реализации подобных ожиданий в Selenium WebDriver существует понятие явных ожиданий (Explicit Waits), которые позволяют задать специальное ожидание для конкретного элемента. Задание явных ожиданий реализуется с помощью инструментов WebDriverWait и expected_conditions. Улучшим наш тест:
+Чтобы тест был надежным, нам нужно не только найти кнопку на странице, но и дождаться, когда кнопка станет кликабельной. Для реализации подобных ожиданий в Selenium WebDriver существует понятие явных ожиданий (Explicit Waits), которые позволяют задать специальное ожидание для конкретного элемента. Задание явных ожиданий реализуется с помощью инструментов WebDriverWait и expected_conditions.
+
+Улучшим наш тест:
+
+```python
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 
-    browser = webdriver.Chrome()
+browser = webdriver.Chrome()
 
-    browser.get("http://suninjuly.github.io/wait2.html")
+browser.get("http://suninjuly.github.io/wait2.html")
 
-    # говорим Selenium проверять в течение 5 секунд, пока кнопка не станет кликабельной
-    button = WebDriverWait(browser, 5).until(
+# говорим Selenium проверять в течение 5 секунд, пока кнопка не станет кликабельной
+button = WebDriverWait(browser, 5).until(
+    EC.element_to_be_clickable((By.ID, "verify"))
+)
+button.click()
+message = browser.find_element(By.ID, "verify_message")
+```
+
+В модуле expected_conditions есть много других правил, которые позволяют реализовать необходимые ожидания:
+
+- title_is
+- title_contains
+- presence_of_element_located
+- visibility_of_element_located
+- visibility_of
+- presence_of_all_elements_located
+- text_to_be_present_in_element
+- text_to_be_present_in_element_value
+- frame_to_be_available_and_switch_to_it
+- invisibility_of_element_located
+- element_to_be_clickable
+- staleness_of
+- element_to_be_selected
+- element_located_to_be_selected
+- element_selection_state_to_be
+- element_located_selection_state_to_be
+- alert_is_present
+
+Описание каждого правила можно найти на [сайте](https://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.support.expected_conditions).
+
+Если мы захотим проверять, что кнопка становится неактивной после отправки данных, то можно задать негативное правило с помощью метода until_not:
+```python
+# говорим Selenium проверять в течение 5 секунд пока кнопка станет неактивной
+button = WebDriverWait(browser, 5).until_not(
         EC.element_to_be_clickable((By.ID, "verify"))
     )
-    button.click()
-    message = browser.find_element(By.ID, "verify_message")
-
-    В модуле expected_conditions есть много других правил, которые позволяют реализовать необходимые ожидания:
-
-    	title_is
-    	title_contains
-    	presence_of_element_located
-    	visibility_of_element_located
-    	visibility_of
-    	presence_of_all_elements_located
-    	text_to_be_present_in_element
-    	text_to_be_present_in_element_value
-    	frame_to_be_available_and_switch_to_it
-    	invisibility_of_element_located
-    	element_to_be_clickable
-    	staleness_of
-    	element_to_be_selected
-    	element_located_to_be_selected
-    	element_selection_state_to_be
-    	element_located_selection_state_to_be
-    	alert_is_present
-
+```
 # Исключения - Exceptions
 - **NoSuchElementException** - если элемент не был найден за отведенное время
 - **StaleElementReferenceException** - если элемент был найден в момент поиска, но при последующем обращении к элементу DOM изменился. Например, мы нашли элемент Кнопка и через какое-то время решили выполнить с ним уже известный нам метод click. Если кнопка за это время была скрыта скриптом, то метод применять уже бесполезно — элемент "устарел" (stale) и мы увидим исключение.
