@@ -3,39 +3,35 @@
 https://sites.google.com/chromium.org/driver/downloads
 ссылка на драйвер для chrome
 
-python -m venv selenium_env
-Создадим виртуальное окружение selenium_env:
+- **python -m venv selenium_env** - Создадим виртуальное окружение selenium_env:
+- **selenium_env\Scripts\activate.bat** - Запустим созданный для нас приложением venv файл activate.bat, чтобы активировать окружение
+- **pip3 install selenium webdriver-manager** - установка selenium и webdriver-manager (позволяет автоматически скачивать самую актуальную версию драйвера для того или иного браузера, без каких-либо дополнительных скачиваний)
+- **pip3 list** -перечень всех установленных библиотек
 
-selenium_env\Scripts\activate.bat
-Запустим созданный для нас приложением venv файл activate.bat, чтобы активировать окружение:
-pip3 install selenium webdriver-manager
--установка selenium и webdriver-manager (позволяет автоматически скачивать самую актуальную версию драйвера для того или иного браузера, без каких-либо дополнительных скачиваний)
-pip3 list
--перечень всех установленных библиотек
-
-pip3 freeze > requirements.txt
--создает в папке venv файл requirements.txt с перечнем всех исользуемых в проекте библиотек
+- **pip3 freeze > requirements.txt** - создает в папке venv файл requirements.txt с перечнем всех исользуемых в проекте библиотек
 
 # ИМПОРТЫ / КЛАССЫ
-from selenium import webdriver # webdriver это и есть набор команд для управления браузером
-from webdriver_manager.chrome import ChromeDriverManager # драйвер для хром
-from selenium.webdriver.chrome.service import Service # класс Service отвечает за установку драйвера, за его открытие и его закрытие
-from selenium.webdriver.common.by import By # импортируем класс By, который позволяет выбрать способ поиска элемента
-import time
+- **from selenium import webdriver** - webdriver это и есть набор команд для управления браузером
+- **from webdriver_manager.chrome import ChromeDriverManager** - драйвер для хром
+- **from selenium.webdriver.chrome.service import Service** - класс Service отвечает за установку драйвера, за его открытие и его закрытие
+- **from selenium.webdriver.common.by import By** # импортируем класс By, который позволяет выбрать способ поиска элемента
+- **import time**
 
 # ИНИЦИАЛИЗАЦИЯ
-driver = webdriver.Chrome()
-инициализируем драйвер браузера. После этой команды вы должны увидеть новое открытое окно браузера
+- **driver = webdriver.Chrome()** - инициализируем драйвер браузера. После этой команды вы должны увидеть новое открытое окно браузера
 
 1. Иницализация в одну строчку, через SeleniumManager - он автоматически распознает ваш Chrome и запустит его. Но важно перед этим найти у себя на компьютере через поиск chromedriver.exe и удалить его!
-   from selenium import webdriver
-   driver = webdriver.Chrome()
-
+```python
+from selenium import webdriver
+driver = webdriver.Chrome()
+```
 2. Инициализация через WebDriverManager
-   from webdriver_manager.chrome import ChromeDriverManager
-   from selenium.webdriver.chrome.service import Service
-   service = Service(ChromeDriverManager().install())
-   driver = webdriver.Chrome(service=service)
+```python
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service)
+```
 3. Инициализация через WebDriverManager + версия Chrome
    from webdriver_manager.chrome import ChromeDriverManager
    from selenium.webdriver.chrome.service import Service
