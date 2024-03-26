@@ -1,11 +1,17 @@
-python --version
-python3 --version
-	-показывает версию python
+## Install
+```python
+apt install python3 # Установка Python в linux
+```
 
-apt install python3
-	-установка Python в linux
-	
-#!/usr/bin/python3
+```python
+#!/usr/bin/python3  -строка в файле линукс, которая позволяет интерпретировать файл как python файл
+```
+
+## Versions
+```python
+python --version # показывает версию python
+python3 --version # показывает версию python
+```
 
 # chmod a+x <имя скрипта>
 	-сделать файл испольняемым для всех пользователей
@@ -19,15 +25,17 @@ apt install python3
 	# <полный путь к файлу скрипта>	-С указанием интерпретатора в начале скрипта
 	# /usr/bin/python3 <полный путь к файлу скрипта>	-Без указания интерпретатора в начале скрипта
 
-======pip======
+## pip
  - система управления пакетами или менеджера пакетов (Python Package Index)
+```python
+apt install python3-pip # установка pip в линуксе
+pip3 --version	# проверить версию pip
+pip install -r requirements.txt		# установка зависимостей
+pip freeze	# просмотр зависимостей
+pip freeze > requirements.txt	# все зависимости скопировать в файл requirements.txt
+```
 
-# apt install python3-pip
-	-установка pip в линуксе
-# pip3 --version
-	-проверить версию pip
-
-# pip3 команда опции пакет(ы)
+#### pip3 команда опции пакет(ы)
 	show		показать информацию о пакете
 	search		найти пакет
 	install		установить пакет
@@ -35,17 +43,10 @@ apt install python3
 	download	скачать пакет и зависимости (без установки)
 	list		вывести список установленных пакетов
 
-pip install -r requirements.txt
-	установка зависимостей
-	
-pip freeze
-	просмотр зависимостей
 
-pip freeze > requirements.txt
-	все зависимости скопировать в файл requirements.txt
 	
 
-======poetry======
+## poetry
 Установка Windows (Powershell)
 	официальная документация https://python-poetry.org/docs/#installing-with-the-official-installer
 	в powershell: (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | py -
