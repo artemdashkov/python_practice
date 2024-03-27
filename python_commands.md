@@ -106,3 +106,18 @@ $ pip install allure-pytest
 $ py.test --alluredir=%allure_result_folder% ./tests
 $ allure serve %allure_result_folder%
 https://pypi.org/project/allure-pytest/
+
+# Трехместное выражение if/else в Python
+
+```python
+if a < b:
+    rez = a + b
+else:
+    rez = a - b
+
+# общий вид if/else в одну строку
+x = a if condition else b
+
+# Выражение примера выше будет выглядеть следующим образом
+rez = a + b if a < b else a - b.
+```
