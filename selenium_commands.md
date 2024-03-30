@@ -1,3 +1,16 @@
+[TOC]
+
+Содержание:
+
+[Подготовка среды / установка пакетов](#подготовка-среды--установка-пакетов)
+
+[Инициализация](#инициализация)
+
+[Методы](#методы)
+- [clear()](#clear)
+- [find_element()](#find_element)
+- [get_attribute()](#get_attribute)
+
 # ПОДГОТОВКА СРЕДЫ / УСТАНОВКА ПАКЕТОВ
 
 https://sites.google.com/chromium.org/driver/downloads
@@ -97,6 +110,7 @@ assert url == "https://www.wikipedia.org/", "адреса не равны"
 - CSS_SELECTOR = "css selector"
 
 ## ID
+Пример кода:
 ```html
 <div class="col-sm-4">
   <div class="card mb-4 box-shadow">
@@ -104,9 +118,9 @@ assert url == "https://www.wikipedia.org/", "адреса не равны"
   </div>
 </div>
 ```
-#bullet (знак # означает, что мы ищем по id со значением bullet).
+Пример селектора на основе кода выше:
 ```python
-login_selector = (By.ID, '#login-desktop')
+login_selector = (By.ID, 'login-desktop')
 ```
 
 ## TAG
@@ -227,7 +241,10 @@ textarea = driver.find_element(By.CSS_SELECTOR, ".textarea")
 ```
 
 # Методы
-## find_element 
+## clear()
+ошибает текстовое поле 
+
+## find_element() 
 Ищем поле для ввода текста. Метод find_element позволяет найти нужный элемент на сайте, указав путь к нему. Метод принимает в качестве аргументов способ поиска и значение, по которому мы будем искать
 
 textarea.send_keys("get()") # Напишем текст ответа в найденное поле
@@ -240,14 +257,18 @@ submit_button.click() # Скажем драйверу, что нужно наж�
 welcome_text_elt = browser.find_element(By.TAG_NAME, "h1") # находим элемент, содержащий текст
 welcome_text = welcome_text_elt.text # записываем в переменную welcome_text текст из элемента welcome_text_elt
 ```
-## get_attribute
+## get_attribute()
+Позволяет получить значение атрибута. 
+
+Например найдём атрибут "checked" с помощью встроенного метода get_attribute и проверим его значение:
 ```python
 people_radio = browser.find_element(By.ID, "peopleRule")
-```
-Найдём атрибут "checked" с помощью встроенного метода get_attribute и проверим его значение:
-```python
 people_checked = people_radio.get_attribute("checked")
 print("value of people radio: ", people_checked)
+```
+Что бы получить текст из веб-элемента (например внутри поля ввода) нужно использовать атрибут "value"
+```python
+email_field.get_attribute('value')
 ```
 
 # Загрузка файлов
@@ -313,23 +334,23 @@ message = browser.find_element(By.ID, "verify_message")
 
 В модуле expected_conditions есть много других правил, которые позволяют реализовать необходимые ожидания:
 
-- title_is
-- title_contains
-- presence_of_element_located
-- visibility_of_element_located
-- visibility_of
-- presence_of_all_elements_located
-- text_to_be_present_in_element
-- text_to_be_present_in_element_value
+- alert_is_present
+- element_located_to_be_selected
+- element_located_selection_state_to_be
+- element_selection_state_to_be
+- **element_to_be_clickable**
+- element_to_be_selected
 - frame_to_be_available_and_switch_to_it
 - invisibility_of_element_located
-- element_to_be_clickable
+- presence_of_all_elements_located
+- presence_of_element_located
+- text_to_be_present_in_element
+- text_to_be_present_in_element_value
+- title_is
+- title_contains
 - staleness_of
-- element_to_be_selected
-- element_located_to_be_selected
-- element_selection_state_to_be
-- element_located_selection_state_to_be
-- alert_is_present
+- **visibility_of_element_located**
+- visibility_of
 
 Описание каждого правила можно найти на [сайте](https://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.support.expected_conditions).
 
@@ -340,6 +361,24 @@ button = WebDriverWait(browser, 5).until_not(
         EC.element_to_be_clickable((By.ID, "verify"))
     )
 ```
+### element_to_be_clickable
+```python
+from selenium.webdriver.support import expected_conditions as EC
+
+wait = WebDriverWait(driver, 10)
+element = wait.until(EC.element_to_be_clickable((By.ID, 'someid')))
+```
+
+An Expectation for checking an element is visible and enabled such that you can click it.
+
+### visibility_of_element_located
+```python
+selenium.webdriver.support.expected_conditions.visibility_of_element_located(locator: Tuple[str, str]) → Callable[[WebDriver], Literal[False] | WebElement]
+```
+An expectation for checking that an element is present on the DOM of a page and visible. Visibility means that the element is not only displayed but also has a height and width that is greater than 0.
+
+locator - used to find the element returns the WebElement once it is located and visible
+
 # Исключения - Exceptions
 - **NoSuchElementException** - если элемент не был найден за отведенное время
 - **StaleElementReferenceException** - если элемент был найден в момент поиска, но при последующем обращении к элементу DOM изменился. Например, мы нашли элемент Кнопка и через какое-то время решили выполнить с ним уже известный нам метод click. Если кнопка за это время была скрыта скриптом, то метод применять уже бесполезно — элемент "устарел" (stale) и мы увидим исключение.
