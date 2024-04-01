@@ -18,6 +18,7 @@
       - [Использование дочерних элементов](#использование-дочерних-элементов)
       - [Использование порядкового номера дочернего элемента](#использование-порядкового-номера-дочернего-элемента)
       - [Использование нескольких классов](#использование-нескольких-классов)
+      - [Регулярные выражения](#регулярные-выражения)
 - [Методы](#методы)
     - [clear()](#clear)
     - [find_element()](#find_element)
@@ -287,6 +288,25 @@ textarea = driver.find_element(By.CSS_SELECTOR, ".title.second") # найдет 
 
 ```python
 textarea = driver.find_element(By.CSS_SELECTOR, ".tradingView[data-type='tradingview']") # найдет элемент, который одновременно содержит в классе значение tradingView class='tradingView brick cc-boxLg' и data-type="tradingview"
+```
+### Регулярные выражения
+- `^=` - `[attribute^=value]` Атрибут начинается с value. Сам символ ^ используется для обозначения начала строки.
+- `$=` - `[attribute$=value]`  Символ $ используется для обозначения окончания строки. Например, активировать триггер при нажатии на ссылки, которые заканчиваются на .jpg
+- `*=` - `[attribute*=value]` Атрибут содержит подстроку value и может быть равен myvalue, value2020, myvalue2020 и т.д. То есть выбираются все элементы с attribute, в значении которого (в любом месте) встречается подстрока (в виде отдельного слова или его части) value
+- `~=` - `[attribute~=value]` Атрибут содержит содержит value, значением которого является набор слов, разделенных пробелами, одно из которых в точности равно value. То есть value должно идти как отдельное слово через пробел, иначе конструкция не будет работать. Например: [attribute~=value] верно для 2020 value и неверно для 2020value или 2020-value.
+- `|=` - `[attribute|=value]`  Атрибут равен value или начинается с value- (дефис следом!)
+
+```Python
+<div class="modal_overlay__f_YlZ">
+ <div class="box_box__5Jmfa box_xl__ox1gr modal_modal__Y9d1p light">
+  <button type="button" class="button_btn__vOh9h button_empty__Nmv1h button_primary__raeTg button_md__Xhil0 modal_close__m5UZc"><img alt="" loading="lazy" width="32" height="32" decoding="async" data-nimg="1" class="icon_icon__EUcfw" src="/_next/static/media/close.fcefa7c3.svg" style="color: transparent;"></button>
+   <div class="grid_grid__2D3md grid_gMd__Cwsg7">
+    <div class="grid_grid__2D3md helpers_textCenter__cyckU grid_gXs__xir6K">
+     <strong class="heading_h3__nTE01 heading_noMargins__P5e_q"><span>Login</span></strong>
+```
+Для поиска элемента используется следующая форма записи:
+```python
+div [class*="modal"] [class*="heading_h3"] # * означает, что наименование значения представлено в частичном виде
 ```
 
 
