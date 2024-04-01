@@ -1,4 +1,4 @@
-## Install
+# Install
 ```python
 apt install python3 # Установка Python в linux
 ```
@@ -7,7 +7,21 @@ apt install python3 # Установка Python в linux
 #!/usr/bin/python3  -строка в файле линукс, которая позволяет интерпретировать файл как python файл
 ```
 
-## Versions
+# Modules
+## flake8
+```python
+pip install flake8 # установка линтера flake8 для программ на Python с открытыми исходными кодами, позволяет находить ошибки в стиле оформления кода
+flake8 programm.py # применить линтер к выбранному файлу
+flake8 project_folder # применить линтер к всему проекту
+```
+## black
+black - форматтер, позволяет выполнять автоматическое редактирование кода
+```python
+pip install black # запуска форматтера
+black 
+```
+
+# Versions
 ```python
 python --version # показывает версию python
 python3 --version # показывает версию python
