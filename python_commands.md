@@ -4,6 +4,8 @@
 	- [flake8](*flake8)
 	- [os](*os)
 - [Работа с виртуальным окружением](#работа-с-виртуальным-окружением)
+- [in](#in)
+- [assert](#assert)
 
 # Install
 ```python
@@ -150,4 +152,45 @@ x = a if condition else b
 
 # Выражение примера выше будет выглядеть следующим образом
 rez = a + b if a < b else a - b.
+```
+
+# in
+- `in` - Возвращает True если последовательность присутствует в объекте
+- `not in` - Возвращает True если последовательность не присутствует в объекте
+```python
+ur_1 = "yandex.ru/slash_1/slash_2"
+ur_2 = "yandex.ru"
+
+print (ur_2 in ur_1)
+> True
+print (ur_2 not in ur_1)
+> False
+
+print (ur_1 in ur_2)
+> False
+print (ur_1 not in ur_2)
+> True
+```
+Вхождение/наличие элемента в список/ кортеж/ множество
+```python
+>>> x = [1, 2, 3, 4, 5, 6, 7, 8]
+>>> 5 in x
+# True
+
+>>> 5 not in x
+# False
+
+>>> 0 in x
+# False
+
+>>> 0 not in x
+# True
+```
+# assert
+```python
+assert True, 'Print message'
+> 
+
+assert False, 'Print message'
+> # assert False, 'Print message', AssertionError: Print message
 ```
