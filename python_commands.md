@@ -194,3 +194,28 @@ assert True, 'Print message'
 assert False, 'Print message'
 > # assert False, 'Print message', AssertionError: Print message
 ```
+
+При выявлении несоответствии в методе assert дальнейший код не выполняется, например:
+- Assert завершился AssertionError 
+```python
+value_1 = 3
+value_2 = 5
+assert value_1 == value_2, "Not equal"
+print('this is code after assert method')
+
+>>>
+Traceback (most recent call last):
+  File "C:\Users\dashkov\PycharmProjects\selenium_stepik_2\lesson_18\draft_3.py", line 4, in <module>
+    assert value_1 == value_2, "Not equal"
+AssertionError: Not equal
+```
+- Assert завершился без ошибок
+```python
+value_1 = 3
+value_2 = 3
+assert value_1 == value_2, "Not equal"
+print('this is code after assert method')
+
+>>>
+this is code after assert method
+```

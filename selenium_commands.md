@@ -31,6 +31,8 @@
     - [maximize_window()](#maximize_window)
 - [Загрузка файлов](#загрузка-файлов)
 - [Ожидания](#ожидания)
+    - [Неявные ожидания - Implicit Waits](#неявные-ожидания---implicit-waits)
+    - [Явное ожидание - Explicit Waits](#явное-ожидание---explicit-waits)
 - [Работа с окнами и вкладками](#работа-с-окнами-и-вкладками)
 - [Исключения - Exceptions](#исключения---exceptions)
 
@@ -444,12 +446,17 @@ element.send_keys(file_path)
 
 # Ожидания
 
-## Неявные ожидания - Selenium Waits (Implicit Waits)
-Решение с time.sleep() плохое: оно не масштабируемое и трудно поддерживаемое.
+## Неявные ожидания - Implicit Waits
+Неявное ожидание - это количество времени (которое указывается нами) в течение которого, WebDriver будет опрашивать DOM. Неявным оно называется, так как мы не указываем чего ждать, изменения текста, размера и т.д…
 
-Идеальное решение могло бы быть таким: нам всё равно надо избежать ложного падения тестов из-за асинхронной работы скриптов или задержек от сервера, поэтому мы будем ждать появление элемента на странице в течение заданного количества времени (например, 5 секунд). Проверять наличие элемента будем каждые 500 мс. Как только элемент будет найден, мы сразу перейдем к следующему шагу в тесте. Таким образом, мы сможем получить нужный элемент в идеальном случае сразу, в худшем случае за 5 секунд.
-
-В Selenium WebDriver есть специальный способ организации такого ожидания, который позволяет задать ожидание при инициализации драйвера, чтобы применить его ко всем тестам. Ожидание называется неявным (Implicit wait), так как его не надо явно указывать каждый раз, когда мы выполняем поиск элементов, оно автоматически будет применяться при вызове каждой последующей команды.
+Основные моменты:
+  - неявные ожидания задается глобально для всех элементов
+  - используется в основном для find_element() и find_elements() - для обнаружения элемента на странице
+  - При проверке на исчезновение элемента будет задерживать наши тесты
+  
+  Рекомендации от Алексея:
+  - неявные ожидания не использовать, т.к. нам нужна конкретика - т.е. лучше прописывать явные ожидания для каждого конкретного случая;
+  - не мешать явные и неявные ожидания - использовать что то одно
 
 Улучшим наш тест с помощью неявных ожиданий. Для этого нам нужно будет убрать time.sleep() и добавить одну строчку с методом implicitly wait:
 ```python
@@ -464,56 +471,89 @@ browser.get("http://suninjuly.github.io/wait1.html")
 ```
 Теперь мы можем быть уверены, что при небольших задержках в работе сайта наши тесты продолжат работать стабильно. На каждый вызов команды find_element WebDriver будет ждать 5 секунд до появления элемента на странице прежде, чем выбросить исключение NoSuchElementException.
 
-## Явное ожидание - Explicit Waits (WebDriverWait и expected_conditions)
+## Явное ожидание - Explicit Waits
+`Явное ожидание` - ожидание конкретного условия, появления элемента, исчезновения элемента, изменения текста и т.д. Если в течение заданного времени событие на наступило, то Selenium выбросит исключение "Timeout Exception", после чего дальнейшее выполнение кода прекрашается.
+
+[ссылка на все условия](https://www.selenium.dev/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.expected_conditions.html)
+
+Синтаксис:
+```python
+wait.until(EC.условие(локатор), mesasge="") = жди.пока_не_выполниться_условие(список_условий.условие(локатор), сообщение в случае если событие не наступило)
+
+wait = WebDriverWait(driver, время, частота)
+wait.until(EC.условие(локатор)))
+
+wait = WebDriverWait(driver, 15, 1)
+BUTTON = ("xpath", "//button[@id='example']")
+wait.until(EC.условие(BUTTON))
+```
+
+Особенности:
+- Обьявляется только там где нужно
+- Ожидает выполнения нужного условия
+- Проверка на отсутствие элемента, может быть условием к завершению теста, так как можно проверить, что элемент пропал и сразу завершить тест, а не ждать лишние 10 секунд.
 
 Методы **find_element** проверяют только то, что элемент появился на странице. В то же время элемент может иметь дополнительные свойства, которые могут быть важны для наших тестов, например:
-
 - Кнопка может быть неактивной, то есть её нельзя кликнуть;
 - Кнопка может содержать текст, который меняется в зависимости от действий пользователя. Например, текст "Отправить" после нажатия кнопки поменяется на "Отправлено";
 - Кнопка может быть перекрыта каким-то другим элементом или быть невидимой.
 
-Explicit Waits (WebDriverWait и expected_conditions)
-Чтобы тест был надежным, нам нужно не только найти кнопку на странице, но и дождаться, когда кнопка станет кликабельной. Для реализации подобных ожиданий в Selenium WebDriver существует понятие явных ожиданий (Explicit Waits), которые позволяют задать специальное ожидание для конкретного элемента. Задание явных ожиданий реализуется с помощью инструментов WebDriverWait и expected_conditions.
+```python
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.ui import WebDriverWait # отвечает за явные ожидания 
+from selenium.webdriver.support import expected_conditions as EC # ожидаемые условия
 
-Улучшим наш тест:
+service = Service(executable_path=ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service)
+driver.implicitly_wait(10)
+
+wait = WebDriverWait(driver, 15, poll_frequency=1)
+
+driver.get("https://demoqa.com/dynamic-properties")
+
+VISIBLE_AFTER_BUTTON = ('xpath', '//button[@id="visibleAfter"]')
+
+BUTTON = wait.until(EC.visibility_of_element_located(VISIBLE_AFTER_BUTTON))
+BUTTON.click()
+```
 
 ```python
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium import webdriver
+# другая форма использования индивидуальная для каждого случая
+WebDriverWait(driver, 10).until(EC.visibility_of_element_located(VISIBLE_AFTER_BUTTON))
 
-browser = webdriver.Chrome()
+# или можно создать метод класса, который будет принимать только локатор и время
+def element_is_visible(self, locator, timeout=1):
+  return Wait(self.driver, timeout).until(
+      EC.visibility_of_element_located(locator)
+  )
 
-browser.get("http://suninjuly.github.io/wait2.html")
+element_is_visible(VISIBLE_AFTER_BUTTON, 5)
 
-# говорим Selenium проверять в течение 5 секунд, пока кнопка не станет кликабельной
-button = WebDriverWait(browser, 5).until(
-    EC.element_to_be_clickable((By.ID, "verify"))
-)
-button.click()
-message = browser.find_element(By.ID, "verify_message")
 ```
 
 В модуле expected_conditions есть много других правил, которые позволяют реализовать необходимые ожидания:
 
-- alert_is_present
+- alert_is_present - Ожидает, что появится всплывающее окно (alert) `wait.until(EC.alert_is_present())` - в метод не передается никакой аргумент!
 - element_located_to_be_selected
-- element_located_selection_state_to_be
-- element_selection_state_to_be
-- **element_to_be_clickable**
-- element_to_be_selected
-- frame_to_be_available_and_switch_to_it
-- invisibility_of_element_located
+- element_located_selection_state_to_be - Ожидает, что состояние выбора элемента (по его локатору) будет соответствовать заданному состоянию (True/False). `wait.until(EC.element_located_selection_state_to_be((By.ID, 'element_id'), True))`
+- element_selection_state_to_be - Ожидает, что состояние выбора элемента будет соответствовать заданному состоянию (True/False) `wait.until(EC.element_selection_state_to_be((By.ID, 'element_id'), True))`
+- **element_to_be_clickable** - Ожидает, что элемент станет кликабельным. `wait.until(EC.element_to_be_clickable((By.ID, 'element_id')))`
+- element_to_be_selected - Ожидает, что элемент будет выбран. `wait.until(EC.element_to_be_selected((By.ID, 'element_id')))`
+- frame_to_be_available_and_switch_to_it - Ожидает, что фрейм будет доступен и переключается на него `wait.until(EC.frame_to_be_available_and_switch_to_it((By.NAME, 'frame_name')))`
+- **invisibility_of_element_located** - Ожидание проверки того, является ли элемент невидимым или он исчез из DOM. `wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, 'css_selector')))`
 - presence_of_all_elements_located
-- presence_of_element_located
-- text_to_be_present_in_element
-- text_to_be_present_in_element_value
-- title_is
-- title_contains
+- presence_of_element_located - Ожидает, что элемент будет присутствовать в DOM. `wait.until(EC.presence_of_element_located((By.ID, 'element_id')))`
+- **text_to_be_present_in_element** - Ожидает, что определенный текст появится в элементе. `wait.until(EC.text_to_be_present_in_element((By.ID, 'element_id'), 'expected_text')))`
+- text_to_be_present_in_element_value - Ожидает, что определенный текст появится в значении элемента (например, в поле ввода). `wait.until(EC.text_to_be_present_in_element_value((By.ID, 'element_id'), 'expected_text')))`
+- title_is - Ожидает, что заголовок страницы будет точно соответствовать заданному тексту `wait.until(EC.title_is('Expected Title'))`
+- title_contains -  Ожидает, что заголовок страницы будет содержать заданный текст `wait.until(EC.title_contains('Expected Text'))`
 - staleness_of
-- **visibility_of_element_located**
-- visibility_of
+- **visibility_of_element_located** - Ожидание проверки того, что элемент присутствует в DOM и виден визуально. Видимость означает, что элемент не только отображается но также имеет высоту и ширину, которые больше 0. `wait.until(EC.visibility_of_element_located((By.XPATH, 'xpath_expression')))`
+- visibility_of - Ожидает, что элемент станет видимым и отображаемым на странице. `element = wait.until(EC.visibility_of(driver.find_element(By.ID, 'element_id')))`
+- url_contains - Ожидает, что URL страницы будет содержать заданный текст. `wait.until(EC.url_contains('example'))`
+- url_to_be - Ожидает, что URL страницы будет точно соответствовать заданному URL `wait.until(EC.url_to_be('https://example.com'))`
 
 Описание каждого правила можно найти на [сайте](https://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.support.expected_conditions).
 
