@@ -2,7 +2,7 @@
 
 - [Подготовка среды / установка пакетов](#подготовка-среды--установка-пакетов)
 - [Импорты/ классы](#импорты--классы)
-- [chrome_options](#chrome_options)
+- [chrome_options/ options](#chrome_options)
 - [prefs](#prefs)
 - [Инициализация](#инициализация)
 - [Навигация](#навигация)
@@ -26,6 +26,8 @@
     - [find_elements()](#find_elements)
     - [get_attribute()](#get_attribute)
     - [get_property()](#get_property)
+    - [getText()](#getText)
+    - [save_screenshot()](#save_screenshot)
     - [send_keys()](#send_keys)
     - [set_window_size()](#set_window_size)
     - [maximize_window()](#maximize_window)
@@ -59,9 +61,20 @@ https://sites.google.com/chromium.org/driver/downloads
 # chrome_options
 Опции браузера - это по сути его настройки перед запуском (возможности браузера).
 ```python
+from selenium.webdriver.chrome.options import Options
+
 chrome_options = webdriver.ChromeOptions() # создаем объект опций, до инициализации драйвера.
+chrome_options = Options() # Или создается вот так
+
 chrome_options.add_argument('--headless') # объявляем опции, используя специальные методы
-chrome_options.add_argument('--incognito') 
+chrome_options.add_argument('--incognito')
+
+options.add_argument("--disable-blink-features=AutomationControlled")
+
+options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36")
+
+options.add_argument("--user-agent=Mozilla/5.0 (Linux; Android 13; SAMSUNG SM-S918B) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/21.0 Chrome/110.0.5481.154 Mobile Safari/537.36") # с данным user-agent браузер будет думать, что зашли с телефона и верстка сайта изменится
+
 driver = webdriver.Chrome(service=service, options=chrome_options) # передаем опции драйверу через артибут options=
 
 prefs = {
@@ -69,9 +82,23 @@ prefs = {
 }
 chrome_options.add_experimental_option('prefs', prefs) # add_experimental_option() - опции, которые не доступны из коробки, "prefs" - зарезервированное имя, которое бует подтягивать настройки
 ```
-Опции:
+другой способ инициализации
+```python
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+
+options = Options()
+options.add_argument("--window-size=1280,800")
+service = Service(ChromeDriverManager().install())
+
+driver = webdriver.Chrome(service=service, options=options)
+```
+
+Опции `chrome_options.add_argument('--xxx') `:
+- `--disable-blink-features=AutomationControlled` - отключить режим автоматизации (WebDriver) 
 - `--headless` - запускает браузер в режиме без графического интерфейса. Это позволяет выполнять тесты в фоновом режиме без отображения окна браузера, позволяет ускорить процесс автоматизации, использует меньше ресурсов процессора
 - `--incognito` - запуск браузера в режиме инкогнито позволяет не использовать кэш и не сохранять данные, что является чистым тестированием
+- `--user-agent=` - User agent – это программный элемент браузера (строка), обозначающий юзера, по сути некий идентификатор, который позволяет браузеру идентифицировать нас, как пользователя. https://useragents.ru/stable.html - ПК агенты
 - `--ignore-certificate-errors` - игнорирование SSL сертификата, позволяет обходить ошибки связанные с SSL сертификатами (например отсуствие SSL сертификата или он закончился)
 - `--window-size=1280,800` - опция в качестве аргумента принимает размер экрана, в selenium есть метод, который позволяет после инициализации драйвера также устанавливать разрешение экрана `driver.set_window_size(1280, 720)`. При использовании опции браузер сразу открывается в заданном размере
 - `--disable-cache` - кэш не будет записываться, все ресурсы, скрипты и картинки всегда будут загружаться по новой не подгружаясь из кэша
@@ -385,6 +412,16 @@ email_field.get_attribute('value')
 - Пример использования: `element.get_property("innerText")` - вернет текстовое содержимое элемента.
 
 Ключевое различие между методами `get_attribute` и `get_property` заключается в том, что `get_attribute` работает с HTML атрибутами, в то время как `get_property` работает с JavaScript свойствами объекта элемента.
+
+## getText()
+
+## save_screenshot()
+Скриншот выполняется с помощью команды `save_screenshot()` и по умолчанию сохраняется в папке с файлом
+```python
+driver.get("https://dzen.ru")
+driver.save_screenshot("screen.png")
+driver.save_screenshot("screen.png")
+```
 
 ## send_keys()
 вводит текст в текстовые поля. К тестовым полям можно отнести теги input и textarea.
