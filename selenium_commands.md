@@ -292,6 +292,8 @@ XPATH (XML Path Language) - это язык запросов к элемента
 //button[contains(text(), 'Join')]
 and - используется, когда нужно выполнять поиск по нескольким аргументам
 //button[@data-cy='submitButton' and @type='submit']
+TAB_PRICING_2 = ("xpath", "//a[contains(@href, '/pricing') and contains(@class, 'nav-link')]")
+BUTTON_ALL_TRACKS_2 = ('css selector', "a[href='/tracks'][class*='btn router-link-exact-active']")
 ```
 
 ## СОСТАВНЫЕ CSS-СЕЛЕКТОРЫ
@@ -637,7 +639,35 @@ driver.switch_to.window(tabs[1]) # переключиться на вторую 
 
 # driver.switch_to.window(driver.window_handles[1])
 ```
+# Alert
+Alert - это обычное предупреждающее или требующее подтверждения окно, появляется в случае нажатия на вызывающую алерт кнопку, либо автоматически при заходе какой-то сайт, к примеру мы будем работать с https://demoqa.com/alerts
 
+Работа с алертами, максимально простая, у него не так много методов, но есть у него один нюанс, это не веб-элемент и его не найти в DOM. Для этого нам необходимо применить другой подход, а именно переключиться на alert.
+
+- `switch_to.alert` - метод для переключения на алерт
+- `accept()` - принимает алерт
+- `dismiss()` - отклоняет алерт
+- `alert.text` - получить текст
+- `alert.send_keys("Hello world")` - ввод данных в alert
+
+Примеры:
+```python
+BUTTON_3 = ("xpath", "//button[@id='confirmButton']")
+wait.until(EC.element_to_be_clickable(BUTTON_3)).click()
+
+alert = wait.until(EC.alert_is_present())
+
+driver.switch_to.alert
+
+alert.accept() # Принимаем алерт
+
+"""другой пример"""
+# Ввод данных в alert
+alert.send_keys("Hello world")
+
+# Обязательно либо примите либо отклоните alert после вводад анных
+alert.accept()
+```
 
 # Исключения - Exceptions
 - **NoSuchElementException** - если элемент не был найден за отведенное время

@@ -154,38 +154,6 @@ x = a if condition else b
 rez = a + b if a < b else a - b.
 ```
 
-# in
-- `in` - Возвращает True если последовательность присутствует в объекте
-- `not in` - Возвращает True если последовательность не присутствует в объекте
-```python
-ur_1 = "yandex.ru/slash_1/slash_2"
-ur_2 = "yandex.ru"
-
-print (ur_2 in ur_1)
-> True
-print (ur_2 not in ur_1)
-> False
-
-print (ur_1 in ur_2)
-> False
-print (ur_1 not in ur_2)
-> True
-```
-Вхождение/наличие элемента в список/ кортеж/ множество
-```python
->>> x = [1, 2, 3, 4, 5, 6, 7, 8]
->>> 5 in x
-# True
-
->>> 5 not in x
-# False
-
->>> 0 in x
-# False
-
->>> 0 not in x
-# True
-```
 # assert
 ```python
 assert True, 'Print message'
@@ -218,4 +186,54 @@ print('this is code after assert method')
 
 >>>
 this is code after assert method
+```
+
+# in
+- `in` - Возвращает True если последовательность присутствует в объекте
+- `not in` - Возвращает True если последовательность не присутствует в объекте
+```python
+ur_1 = "yandex.ru/slash_1/slash_2"
+ur_2 = "yandex.ru"
+
+print (ur_2 in ur_1)
+> True
+print (ur_2 not in ur_1)
+> False
+
+print (ur_1 in ur_2)
+> False
+print (ur_1 not in ur_2)
+> True
+```
+Вхождение/наличие элемента в список/ кортеж/ множество
+```python
+>>> x = [1, 2, 3, 4, 5, 6, 7, 8]
+>>> 5 in x
+# True
+
+>>> 5 not in x
+# False
+
+>>> 0 in x
+# False
+
+>>> 0 not in x
+# True
+```
+
+# random
+```python
+import random
+
+""" Функции randint и randrange возвращают целое число. """
+number = random.randint(l, 10) # вернет значение от 1 до 10, оба значения включены в диапазон
+number = random.randrange(lO) # вернет значение от 0 до 9
+number = random.randrange(5,10) # вернет значение от 5 до 9
+number = random.randrange(1, 102, 10) # вернет одно значение из списка [1, 11, 21, 31, 41, 51, 61, 71, 81, 91, 101]
+
+""" Функции random возвращает случайное число с плавающей точкой."""
+number = random.random() # возвращает случайное число с плавающей точкой в диапазоне от 0.0 до 1.0 (но исключая 1.0)
+
+""" Функции uniform тоже возвращает случайное число с плавающей точкой,  но при этом она позволяет задавать диапазон значений, из которого следует отбирать значения. """
+number = random.uniform(1.0, 10.0) # возвращает случайное число с плавающей точкой в диапазоне от 1.0 до 10.0 
 ```
