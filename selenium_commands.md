@@ -7,6 +7,7 @@
 - [Инициализация](#инициализация)
 - [Навигация](#навигация)
 - [Получение данных из браузера](#получение-данных-из-браузера)
+- [Cookies](#cookies)
 - [Поиск](#поиск)
     - [ID](#id)
     - [TAG](#tag)
@@ -171,11 +172,39 @@ driver.refresh() # метод refresh обновляет страницу
 - `driver.current_url` - выводит данные о текущем URL
 - `driver.title` - атрибут title возвращает тайтл текущей страницы
 - `driver.page_source` получить код всей страницы. используется в автоматизации для парсинга и сравнения данных
-# ВАЛИДАЦИЯ ДАННЫХ
+
+# Cookies
 ```python
-assert url == "https://www.wikipedia.org/", "адреса не равны"
+# получить куки для словаря со значением с name "country_code"
+driver.get_cookie("country_code")
+print(driver.get_cookie("country_code"))
+>>> {'domain': 'www.freeconferencecall.com', 'httpOnly': True, 'name': 'country_code', 'path': '/', 'sameSite': 'Lax', 'secure': True, 'value': 'us'}
 ```
-метод assert позволяет сравнить данные, в случае несоответствия вывод сообщение в кавычках
+
+```python
+# добавление cookies
+driver.add_cookie({
+    "name": "Example",
+    "value": "Kukushka"
+})
+```
+
+```python
+# для замены cookies необходимо сначала удалить существующую куку и на ее место добавить новую куку с тем же именем
+driver.delete_cookie("split")
+
+driver.add_cookie({
+    "name": "split",
+    "value": "QWERTY"
+})
+```
+
+### Методы:
+- `get_cookie("country_code")` - получить какие-то конкретные куки, где `country_code` это name cookies 
+- `get_cookies()` - получить все куки
+- `.add_cookie({"": ""})` - добавить куки, принимает словарь
+- `driver.delete_cookie("split")` - удалить куки с name split
+- `driver.delete_all_cookies()` - удалить все куки
 
 # ПОИСК
 Для поиска элементов на странице в Selenium WebDriver используются несколько стратегий, позволяющих искать:
