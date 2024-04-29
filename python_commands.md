@@ -4,8 +4,9 @@
 	- [flake8](*flake8)
 	- [os](*os)
 - [Работа с виртуальным окружением](#работа-с-виртуальным-окружением)
-- [in](#in)
 - [assert](#assert)
+- [in](#in)
+- [pickle](#pickle)
 
 # Install
 ```python
@@ -237,3 +238,21 @@ number = random.random() # возвращает случайное число с
 """ Функции uniform тоже возвращает случайное число с плавающей точкой,  но при этом она позволяет задавать диапазон значений, из которого следует отбирать значения. """
 number = random.uniform(1.0, 10.0) # возвращает случайное число с плавающей точкой в диапазоне от 1.0 до 10.0 
 ```
+
+# pickle
+```python
+import os
+import pickle
+
+# синтаксис pickle.dump: что, куда и операции
+pickle.dump(
+    driver.get_cookies(),
+    open(os.getcwd()+"/cookies/cookies.pkl", "wb"))
+
+# синтаксис pickle.load: что загружем, откудакуда и операции
+cookies = pickle.load(open(os.getcwd()+"/cookies/cookies.pkl", "rb"))
+```
+
+Операции pickle:
+- wb - write binary: записать в бинарном формате
+- rb - read binary: считать из  бинарного формата

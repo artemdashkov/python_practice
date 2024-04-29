@@ -174,6 +174,7 @@ driver.refresh() # метод refresh обновляет страницу
 - `driver.page_source` получить код всей страницы. используется в автоматизации для парсинга и сравнения данных
 
 # Cookies
+**Куки (cookies)** - это небольшие текстовые файлы, которые веб-сайты сохраняют на вашем компьютере, когда вы их посещаете. Когда вы снова посещаете тот же веб-сайт, ваш браузер отправляет эти файлы на сервер, чтобы веб-сайт мог "вспомнить" некоторую информацию о вас.
 ```python
 # получить куки для словаря со значением с name "country_code"
 driver.get_cookie("country_code")
@@ -199,7 +200,30 @@ driver.add_cookie({
 })
 ```
 
-### Методы:
+```python
+import pickle
+# сохранение cookies в файл и загрузка из файла
+
+pickle.dump(
+    driver.get_cookies(),
+    open(os.getcwd()+"/cookies/cookies.pkl", "wb")
+    )
+
+cookies = pickle.load(open(os.getcwd()+"/cookies/cookies.pkl", "rb"))
+
+"""
+перед добавлением/обновлением куков нужно их удалить,
+иначе произодет дублирование куков и новые куки не сработают.
+"""
+
+driver.delete_all_cookies()
+for cookie in cookies:
+    driver.add_cookie(cookie)
+
+driver.refresh() # чтобы куки применились
+```
+
+### Методы cookies:
 - `get_cookie("country_code")` - получить какие-то конкретные куки, где `country_code` это name cookies 
 - `get_cookies()` - получить все куки
 - `.add_cookie({"": ""})` - добавить куки, принимает словарь
@@ -295,13 +319,13 @@ login_selector = (By.ID, 'login-desktop')
 ## XPATH
 XPATH (XML Path Language) - это язык запросов к элементам XML, HTML документов, и других документов класса xml.
 Основные символы, которые используются в XPATH-локаторах:
-// - глобальный поиск относительно корня (начала) документа (обычно корень - это html тег)
-/ - поиск по уровню вложенности, например когда элемент внутри элемента
+- // - глобальный поиск относительно корня (начала) документа (обычно корень - это html тег)
+- / - поиск по уровню вложенности, например когда элемент внутри элемента
+- //employee -найдет глобально все теги employee
+- //employee/name -найдет глобально employee и вложенный именно в него name
+- //header//div[2] -найдет каждый второй div лежащий внутри header
+- (//header//div)[2] -сначала скобки, вернут нам список всех div-блоков внутри header, а потом мы получаем второй div из полученного списка
 
-//employee -найдет глобально все теги employee
-//employee/name -найдет глобально employee и вложенный именно в него name
-//header//div[2] -найдет каждый второй div лежащий внутри header
-(//header//div)[2] -сначала скобки, вернут нам список всех div-блоков внутри header, а потом мы получаем второй div из полученного списка
 ```python
 // элемент [ @атрибут = ’значение атрибута’ ] #синтаксис поиска по атрибутам.
 ```
@@ -620,6 +644,7 @@ element_is_visible(VISIBLE_AFTER_BUTTON, 5)
 - staleness_of
 - **visibility_of_element_located** - Ожидание проверки того, что элемент присутствует в DOM и виден визуально. Видимость означает, что элемент не только отображается но также имеет высоту и ширину, которые больше 0. `wait.until(EC.visibility_of_element_located((By.XPATH, 'xpath_expression')))`
 - visibility_of - Ожидает, что элемент станет видимым и отображаемым на странице. `element = wait.until(EC.visibility_of(driver.find_element(By.ID, 'element_id')))`
+- `wait.until(EC.url_changes(expected_link))` 
 - url_contains - Ожидает, что URL страницы будет содержать заданный текст. `wait.until(EC.url_contains('example'))`
 - url_to_be - Ожидает, что URL страницы будет точно соответствовать заданному URL `wait.until(EC.url_to_be('https://example.com'))`
 
