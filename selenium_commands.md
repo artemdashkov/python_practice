@@ -8,6 +8,7 @@
 - [Навигация](#навигация)
 - [Получение данных из браузера](#получение-данных-из-браузера)
 - [Cookies](#cookies)
+- [Checkboxes - Radiobutton](#checkboxes---radiobutton)
 - [Поиск](#поиск)
     - [ID](#id)
     - [TAG](#tag)
@@ -229,6 +230,95 @@ driver.refresh() # чтобы куки применились
 - `.add_cookie({"": ""})` - добавить куки, принимает словарь
 - `driver.delete_cookie("split")` - удалить куки с name split
 - `driver.delete_all_cookies()` - удалить все куки
+
+# Checkboxes - Radiobutton
+### Checkboxes
+Чек-бокс / флажок - это один из самых распространенных элементов в веб-формах, например, в тестах с вариантами ответа или подтверждение согласия на что-либо.
+
+Но с развитием сферы веб-разработки он превратился в нечто большее и начал использоваться буквально где угодно.
+
+**Например**:
+- Выбор карточки
+- Слайды (Toggle)
+- Стандартный чекбокс
+
+```python
+# установка чек-бокса
+driver.get("https://the-internet.herokuapp.com/checkboxes")
+CHECKBOX_1 = driver.find_element(*CHECKBOX_1_LOCATOR)
+CHECKBOX_1.click()
+```
+
+```python
+# Проверка статуса чек-бокса - способ 1
+print(CHECKBOX_1.get_attribute("checked")) # >>> None
+CHECKBOX_1.click()
+print(CHECKBOX_1.get_attribute("checked")) # >>> true
+print(type(CHECKBOX_1.get_attribute("checked"))) # >>> <class 'str'>
+```
+
+```python
+# Проверка статуса чек-бокса - способ 2
+print(CHECKBOX_1.is_selected()) # >>> False
+CHECKBOX_1.click()
+print(CHECKBOX_1.is_selected()) # >>> True
+print(type(CHECKBOX_1.is_selected())) # >>> <class 'bool'>
+```
+
+```python
+# Особенности работы #1, например когда элемент перекрыт создается два элемента
+CHECKBOX_HOME_STATUS_LOCATOR = ('xpath', '//input[@id="tree-node-home"]') # для получения статуса
+CHECKBOX_HOME_ACTION_LOCATOR = ('xpath', '//span[@class="rct-checkbox"]') # для взимодействия
+
+driver.get("https://demoqa.com/checkbox")
+
+CHECKBOX_HOME_STATUS = driver.find_element(*CHECKBOX_HOME_STATUS_LOCATOR)
+CHECKBOX_HOME_ACTION = driver.find_element(*CHECKBOX_HOME_ACTION_LOCATOR)
+
+print(CHECKBOX_HOME_STATUS.is_selected()) # >>> False
+CHECKBOX_HOME_ACTION.click()
+print(CHECKBOX_HOME_STATUS.is_selected()) # >>> True
+```
+
+```python
+# Особенности работы #2, когда нет тега input нужно обращать внимание на изменение в классе при клике на элемент, который ведет себя как чек-бокс
+driver.get("https://demoqa.com/selectable")
+
+status_1 = driver.find_element(*ELEMENT_ONE_LOCATOR).get_attribute("class")
+print(status_1) # >>> mt-2 list-group-item list-group-item-action
+driver.find_element(*ELEMENT_ONE_LOCATOR).click()
+
+status_2 = driver.find_element(*ELEMENT_ONE_LOCATOR).get_attribute("class")
+print(status_2) # >>> mt-2 list-group-item active list-group-item-action
+assert "active" in status_2, "active not in status"
+```
+
+**Методы:**
+- `click()` - метод для клика по чек-боксу
+- `is_selected()` - проверяет статус чек-бокса
+- `is_enabled()` - проверяет доступность элемента
+
+### Radiobutton
+Взаимодействие с Radiobutton аналогичное как и с Checkbox. Аналогичные особенности.
+```python
+YES_STATUS_LOCATOR = ("xpath", '//input[@id="yesRadio"]')
+YES_ACTION_LOCATOR = ("xpath", '//label[@for="yesRadio"]')
+
+driver.get("https://demoqa.com/radio-button")
+
+print(driver.find_element(*YES_STATUS_LOCATOR).is_selected()) # >>> False
+driver.find_element(*YES_ACTION_LOCATOR).click()
+print(driver.find_element(*YES_STATUS_LOCATOR).is_selected())  # >>> True
+```
+
+```python
+# Особенность работы с неактивным Radiobutton
+NO_STATUS_LOCATOR = ("xpath", '//input[@id="noRadio"]')
+NO_ACTION_LOCATOR = ("xpath", '//label[@for="noRadio"]')
+
+driver.get("https://demoqa.com/radio-button")
+print(driver.find_element(*NO_STATUS_LOCATOR).is_enabled()) # >>> False
+```
 
 # ПОИСК
 Для поиска элементов на странице в Selenium WebDriver используются несколько стратегий, позволяющих искать:
@@ -726,5 +816,7 @@ alert.accept()
 # Исключения - Exceptions
 - **NoSuchElementException** - если элемент не был найден за отведенное время
 - **StaleElementReferenceException** - если элемент был найден в момент поиска, но при последующем обращении к элементу DOM изменился. Например, мы нашли элемент Кнопка и через какое-то время решили выполнить с ним уже известный нам метод click. Если кнопка за это время была скрыта скриптом, то метод применять уже бесполезно — элемент "устарел" (stale) и мы увидим исключение.
-- **ElementNotVisibleException** - если элемент был найден в момент поиска, но сам элемент невидим (например, имеет нулевые размеры), и реальный пользователь не смог бы с ним взаимодействовать, то получим
 - **ElementClickInterceptedException** - элеммент перекрыт другим элементом, например всплывающим окном.
+- **ElementNotInteractableException** - с элементом невозможно взаимодействовать. возможно элемент перекрыт другими элементами.
+- **ElementNotVisibleException** - если элемент был найден в момент поиска, но сам элемент невидим (например, имеет нулевые размеры), и реальный пользователь не смог бы с ним взаимодействовать, то получим
+
