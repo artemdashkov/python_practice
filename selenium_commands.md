@@ -38,7 +38,10 @@
     - [Неявные ожидания - Implicit Waits](#неявные-ожидания---implicit-waits)
     - [Явное ожидание - Explicit Waits](#явное-ожидание---explicit-waits)
 - [Работа с окнами и вкладками](#работа-с-окнами-и-вкладками)
+- [iframe](#iframe)
+- [Alert](#alert)
 - [Исключения - Exceptions](#исключения---exceptions)
+- [Action chains](#action-chains)
 
 
 # ПОДГОТОВКА СРЕДЫ / УСТАНОВКА ПАКЕТОВ
@@ -783,6 +786,23 @@ driver.switch_to.window(tabs[1]) # переключиться на вторую 
 
 # driver.switch_to.window(driver.window_handles[1])
 ```
+
+# iframe
+**iframe** - это html-страница, внутри другой html-страницы.
+
+Методы:
+- `switch_to.frame()` - В качестве аргумента, он принимает WebElement, атрибут name или индекс нужного iframe.
+- `switch_to.default_content()` - Переключение с iframe обратно на страницу
+
+```python
+iframe_volunteer = driver.find_element(By.XPATH, "//iframe")
+driver.switch_to.frame(iframe_volunteer)
+
+# Теперь попробуем ввести данные в поле First Name
+first_name_field = driver.find_element(By.XPATH, "//input[@name='RESULT_TextField-1']")
+first_name_field.send_keys("Alexey")
+```
+
 # Alert
 Alert - это обычное предупреждающее или требующее подтверждения окно, появляется в случае нажатия на вызывающую алерт кнопку, либо автоматически при заходе какой-то сайт, к примеру мы будем работать с https://demoqa.com/alerts
 
@@ -820,3 +840,47 @@ alert.accept()
 - **ElementNotInteractableException** - с элементом невозможно взаимодействовать. возможно элемент перекрыт другими элементами.
 - **ElementNotVisibleException** - если элемент был найден в момент поиска, но сам элемент невидим (например, имеет нулевые размеры), и реальный пользователь не смог бы с ним взаимодействовать, то получим
 
+
+# Action chains
+Action chains (Цепочка действий) - это довольно таки низко-уровнивая автоматизация (более продвинутая), например есть задачи, когда нужно нажать правой кнопкой мыши, навестить на что-то, перетащить, и прочее…
+
+**Алгоритм выполнения:**
+1. Сначала мы обращаемся к action
+2. Далее указываем цепочку действий которую хотим совершить, например "Кликни сюда". Самое важное, что через точку можно указать несколько действий по порядку "Кликни сюда. наведись сюда. кликни правой кнопкой сюда"
+3. В конце цепочки говорим "Выполняй!" perform()
+
+```python
+from selenium.webdriver.common.action_chains import ActionChains
+
+action = ActionChains(driver) # создан обьект через который будут выполняться действия мыши
+
+# одинарный клик левой кнопкой мыши
+left_click_button = driver.find_element(*LEFT_CLICK_BUTTON_LOCATOR)
+action.click(left_click_button).preform()
+
+# двойной клик левой кнопкой мыши
+double_click_button = driver.find_element
+action.double_click(double_click_button).perform()
+
+# клик правой кнопкой мыши
+right_click_button = driver.find_element(*RIGHT_CLICK_BUTTON_LOCATOR)
+action.context_click(right_click_button).perform()
+
+#выполнение цепочки действий
+action.click(left_click_button) \
+    .pause(1) \ # пауза в течение 1 секунды
+    .double_click(double_click_button) \
+    .pause(1) \
+    .context_click(right_click_button) \
+    .pause(1) \
+    .perform()
+```
+
+Методы:
+- `click()` - клик левой кнопкой мыши
+- `double_click()` - двойной клик левой кнопкой мыши
+- `context_click()` - клик правой кнопкой мыши
+- `move_to_element()` - перемещение курсора на элемент
+- `scroll_to_element()` - выполнить скроллирование до элемента
+- `pause()` - паза
+- `perform()` - обязательный метод, который устанавливается в конце цепочки
