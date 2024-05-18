@@ -1,8 +1,8 @@
 - [Install](#install)
 - [Modules](#modules)
-	- [black](*black)
-	- [flake8](*flake8)
-	- [os](*os)
+	- [black](#black)
+	- [flake8](#flake8)
+	- [os](#os)
 - [Работа с виртуальным окружением](#работа-с-виртуальным-окружением)
 - [assert](#assert)
 - [in](#in)
@@ -39,6 +39,8 @@ print(os.getcwd()) # получить путь к папке, где наход�
 print(f'{os.getcwd()}\\downloads')
 > C:\Users\admin\PycharmProjects\selenium\lesson_10\downloads
 ```
+- `os.mkdir('./dir_1')` - создает папку в месте размещению исполняемого файла
+- `os.mkdir('./dir_2./dir_3')` - создает папку dir_2 в которой будет размещена папка dir_3
 
 # Versions
 ```python
