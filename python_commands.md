@@ -40,7 +40,7 @@ print(f'{os.getcwd()}\\downloads')
 > C:\Users\admin\PycharmProjects\selenium\lesson_10\downloads
 ```
 - `os.mkdir('./dir_1')` - создает папку в месте размещению исполняемого файла
-- `os.mkdir('./dir_2./dir_3')` - создает папку dir_2 в которой будет размещена папка dir_3
+- `os.mkdir('./dir_2./dir_3')` - создает папку dir_2 в которой будет размещена папка dir_3, выдаст исключение "FileExistsError" если папка уже создана
 
 # Versions
 ```python
