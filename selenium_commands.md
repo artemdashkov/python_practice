@@ -42,6 +42,7 @@
 - [Alert](#alert)
 - [Исключения - Exceptions](#исключения---exceptions)
 - [Action chains](#action-chains)
+- [Drag and Drop](#drag-and-drop)
 
 
 # ПОДГОТОВКА СРЕДЫ / УСТАНОВКА ПАКЕТОВ
@@ -884,3 +885,74 @@ action.click(left_click_button) \
 - `scroll_to_element()` - выполнить скроллирование до элемента
 - `pause()` - паза
 - `perform()` - обязательный метод, который устанавливается в конце цепочки
+
+
+# Drag and Drop
+
+```python
+# first way
+driver.get("https://the-internet.herokuapp.com/drag_and_drop")
+
+A = driver.find_element(*A_LOCATOR)
+B = driver.find_element(*B_LOCATOR)
+
+action.drag_and_drop(A, B).perform()
+```
+
+```python
+# second way
+url = "https://tympanus.net/Development/DragDropInteractions/sidebar.html"
+driver.get(url)
+
+GRID_ITEM_3_LOCATOR = ('xpath', '(//div[@class="grid__item"])[3]')
+DROP_AREA_ITEM_3_LOCATOR = ('xpath', '(//div[@class="drop-area__item"])[3]')
+
+action.click_and_hold(driver.find_element(*GRID_ITEM_3_LOCATOR)) \
+    .pause(1.5) \
+    .move_to_element(driver.find_element(*DROP_AREA_ITEM_3_LOCATOR)) \
+    .release() \
+    .perform()
+```
+
+- `click_and_hold()` - Данная фишка нужна для работы с ползунками или для фич ориентированных на удержание курсора на элементе, в качестве аргумента принимает веб-элемент
+- `drag_and_drop()` - метод для перетягивания одного элемента на другой
+- `release()` - метод для отпускания кнопки мыши
+
+# Javascript и скроллинг
+
+- `driver.execute_script()` - команда, для выполнения javascript
+
+```python
+driver.execute_script("alert('Hello')")  # выводит алерт на странице с текстом 'Hello'
+```
+
+```python
+class Scrolls:
+
+    def __init__(self, driver, action):
+        self.driver = driver
+        self.action = action
+
+    def scroll_by(self, x, y): # Скролл по x и y
+        self.driver.execute_script(f"window.scrollTo({x}, {y})")
+
+    def scroll_to_bottom(self): # Скролл в самый низ страницы
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+
+    def scroll_to_top(self): # Скролл на самый верх страницы
+        self.driver.execute_script("window.scrollTo(0, 0)")
+
+    def scroll_to_element(self, element):# Скролл к элементу с раскрытием контента под ним
+        self.action.scroll_to_element(element).perform()
+        self.driver.execute_script("""
+        window.scrollTo({
+            top: window.scrollY + 700,
+        });
+        """)
+```
+
+```python
+driver.execute_script('return arguments[0].scrollIntoView({block: "center", inline: "nearest"});',
+driver.find_elements(*BLOCK_LOCATOR)[0]
+      )
+```
