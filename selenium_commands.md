@@ -29,6 +29,8 @@
     - [get_attribute()](#get_attribute)
     - [get_property()](#get_property)
     - [getText()](#getText)
+    - [get_window_position()](#get_window_position)
+    - [set_window_position()](#set_window_position)
     - [save_screenshot()](#save_screenshot)
     - [send_keys()](#send_keys)
     - [set_window_size()](#set_window_size)
@@ -563,6 +565,23 @@ email_field.get_attribute('value')
 Ключевое различие между методами `get_attribute` и `get_property` заключается в том, что `get_attribute` работает с HTML атрибутами, в то время как `get_property` работает с JavaScript свойствами объекта элемента.
 
 ## getText()
+
+## get_window_position()
+```python
+driver.get_window_position()
+"""
+Gets the x,y position of the current window. - Это означает, расположение окна браузера на мониторе ПК, например полученное значение {'x': 100, 'y': 0} означает, что окно браузера на дисплее ПК будет смещено вправо на 100 пикселей и располагаться вплонутю к верхней границе монитора
+"""
+```
+
+## set_window_position()
+```python
+driver.set_window_position()
+"""
+Sets the x,y position of the current window. (window.moveTo). - Это метод располагает окна браузера на мониторе ПК в указанных значениях, например после выполнении метода driver.set_window_position(0, 0) окно браузера на дисплее ПК будет размещено в левом верхнем углу монитора
+"""
+```
+
 
 ## save_screenshot()
 Скриншот выполняется с помощью команды `save_screenshot()` и по умолчанию сохраняется в папке с файлом
