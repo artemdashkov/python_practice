@@ -615,6 +615,16 @@ email_field.send_keys("ваш email")
 ```python
 driver.set_window_size(1280, 720)
 ```
+При этом внутренние размеры будут меньше установленных, например при проверке:
+```python
+driver.set_window_size(1280, 720)
+window_width = driver.execute_script("return window.innerWidth;")
+window_height = driver.execute_script("return window.innerHeight;")
+
+print('window_width', window_width) # вернет 1267
+print('window_height', window_height) # вернет 575
+print(driver.get_window_size()) # {'width': 1282, 'height': 722}
+```
 
 ## maximize_window()
 драйвер запускает браузер во весь размер экрана
