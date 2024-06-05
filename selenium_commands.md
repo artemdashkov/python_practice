@@ -24,6 +24,7 @@
       - [Регулярные выражения](#регулярные-выражения)
 - [Методы](#методы)
     - [clear()](#clear)
+    - [execute_script()](#execute_script)
     - [find_element()](#find_element)
     - [find_elements()](#find_elements)
     - [get_attribute()](#get_attribute)
@@ -523,6 +524,13 @@ div [class*="modal"] [class*="heading_h3"] # * означает, что наим
 # Методы
 ## clear()
 очищает текстовое поле. Используется, например, когда в поле ввода уже есть значение, установленное по-умолчанию. Если поле не очистить, то при выполнении команды `send_keys()` введенный текст будет добавлен к существующему тексту.
+
+## execute_script()
+- `driver.execute_script("return window.scrollY;")` - возвращает Y координату текущего положения окна барузера, т.е.верхнего левого угла
+- `driver.execute_script("return window.scrollX;")` - возвращает X координату текущего положения окна барузера, т.е.верхнего левого угла, скорее всего всегда будет 0
+- `driver.execute_script("return window.innerWidth;")`
+- `driver.execute_script("return window.innerHeight;")`
+
 
 ## find_element() 
 Ищем поле для ввода текста. Метод find_element позволяет найти нужный элемент на сайте, указав путь к нему. Метод принимает в качестве аргументов способ поиска и значение, по которому мы будем искать
