@@ -46,6 +46,7 @@
 - [Исключения - Exceptions](#исключения---exceptions)
 - [Action chains](#action-chains)
 - [Drag and Drop](#drag-and-drop)
+- [DevTools](#DevTools)
 
 
 # ПОДГОТОВКА СРЕДЫ / УСТАНОВКА ПАКЕТОВ
@@ -993,3 +994,7 @@ driver.execute_script('return arguments[0].scrollIntoView({block: "center", inli
 driver.find_elements(*BLOCK_LOCATOR)[0]
       )
 ```
+
+# DevTools
+
+- `setTimeout(function() { debugger; }, 5000)` - код, который включит отложенный старт дебаг-режима в devtools - останавливает выполнене любого кода на странице через 5 сек. необходимо открыть DevTools и перейти на вкладку "Console", вставить код и нажать Enter
