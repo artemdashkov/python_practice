@@ -46,6 +46,7 @@
 - [Исключения - Exceptions](#исключения---exceptions)
 - [Action chains](#action-chains)
 - [Drag and Drop](#drag-and-drop)
+- [DropDown](#dropdown)
 - [DevTools](#DevTools)
 
 
@@ -995,6 +996,154 @@ driver.find_elements(*BLOCK_LOCATOR)[0]
       )
 ```
 
+# DropDown
+## Стандартный DropDown (class Select)
+Необходимые импорты
+```python
+from selenium.webdriver.support.select import Select
+
+SELECT_LOCATROR = ('xpath', '//select[@id="dropdown"]')
+
+driver.get('https://the-internet.herokuapp.com/dropdown')
+DROPDOWN = Select(driver.find_element(*SELECT_LOCATROR))
+```
+Пример html кода
+```html
+<select id="dropdown">
+    <option value="" disabled="disabled" selected="selected">Please select option</option>
+    <option value="1">Option 1</option>
+    <option value="2">Option 2</option>
+ </select>
+```
+Выбор элемента из выпадающего списка в Selenium реализовано 3-мя способами
+1. Используя text `select_by_visible_text()`
+2. Используя index `select_by_index(index)`
+3. Используя value `select_by_value("")`
+```python
+DROPDOWN.select_by_visible_text('Option 1') # по тексту
+DROPDOWN.select_by_value('2') # по value - рекомендуется использовать его
+DROPDOWN.select_by_index(1) # по порядку
+```
+
+Перебор элементов выпадающего списка:
+```python
+all_options = DROPDOWN.options # Вернет все элементы
+
+for option in all_options:
+    DROPDOWN.select_by_visible_text(option.text) # перебор всех по тексту
+    time.sleep(2)
+    # возможная проверка
+    if "Option 1" in option.text:
+        print(f'Опция "Option 1" присутствует.')
+
+for option in all_options:
+    DROPDOWN.select_by_index(all_options.index(option)) # перебор по индексу
+    time.sleep(2)
+
+for index, option in enumerate(all_options):
+    DROPDOWN.select_by_index(index) # альтернативный вариант перебора по индексу
+
+for option in all_options:
+    DROPDOWN.select_by_value(option.get_attribute('value')) # перебор по value
+    time.sleep(2)
+```
+
+## Работа с клавиатурой
+Синтаксис максимально прост:
+- Нажатие клавиши - пример: Keys.ENTER
+- Сочетание клавиш - пример: Keys.CONTROL + “A”
+```python
+from selenium.webdriver import Keys
+
+driver.get("http://the-internet.herokuapp.com/key_presses") # Сайт для работы
+KEY_PRESS_INPUT = ("xpath", "//input[@id='target']") # Поле ввода
+driver.find_element(*KEY_PRESS_INPUT).send_keys("Hello World") # Ввод текста
+driver.find_element(*KEY_PRESS_INPUT).send_keys(Keys.COMMAND + "A") # Выделение всего текста
+driver.find_element(*KEY_PRESS_INPUT).send_keys(Keys.BACKSPACE) # Удаление выделенного текста
+```
+**Важно:** Чтобы избежать ошибок из-за разницы систем с CONTROL и COMMAND можно написать следующий код, создав универсальную клавишу CMD_CTRL.
+При ее использование будет проверятся система на которой запускается код, и в соответствии с этим будет вызываться либо CONTROL, либо СOMMAND.
+```python
+import platform
+
+os_name = platform.system()
+CMD_CTRL = Keys.COMMAND if os_name == "Darwin" else Keys.CONTROL
+
+driver = webdriver.Chrome()
+driver.find_element().send_keys(CMD_CTRL + "A") # Использование
+```
+
+## Современный DropDown
+В современной разработке все реже используется тег `<select>`, и вместо этого используется реализация через теги `<input>` или `<div>`.
+
+Пример html кода
+```html
+<div class=" css-1hwfws3">
+    <div class=" css-1wa3eu0-placeholder">Select Title</div>
+    <div class="css-1g6gooi">
+        <div class="" style="display: inline-block;">
+        <input autocapitalize="none" autocomplete="off" autocorrect="off" id="react-select-3-input"...
+```
+
+**Способ № 1**
+- В первую очередь, нужно отыскать `<input>`, тут нужно быть похитрее, придется провалится в код и хорошенько поискать
+- затем найти локатор для выпадающего списка
+- ввести текст элемента списка
+- нажать ENTER
+
+```python
+INPUT_FIELD_LOCATOR = ('xpath', "//input[@id='react-select-3-input']")
+driver.find_element(*INPUT_FIELD_LOCATOR).send_keys("Ms.")
+driver.find_element(*INPUT_FIELD_LOCATOR).send_keys(Keys.ENTER)
+```
+
+**Способ № 2.** Тут все еще проще, нам необходимо просто раскрыть dropdown и проинспектировать нужный элемент, затем кликнуть на него
+```python
+SELCT_ONE_LOCATOR = ('xpath', '//div[@id="selectOne"]')
+PROF_LOCATOR = ('xpath', '//div[@id="react-select-3-option-0-4"]')
+
+driver.find_element(*SELCT_ONE_LOCATOR).click()
+driver.find_element(*PROF_LOCATOR)
+```
+
+Проинспектировать и достать элементы внутри dropdown стандартным способом невозможно. При попытке инспектирования, dropdown будет закрываться, чтобы проинспектировать элемент воспользуемся скриптом на JS:
+```javascript
+setTimeout(function() { debugger; }, 5000); - включит отложенный старт дебаг-режима в devtools.
+```
+
+Также можно создать универсальную функцию для выборки элемента из нашего dropdown
+```python
+driver.get("https://demoqa.com/select-menu")
+
+driver.find_element("xpath", "//div[@id='withOptGroup']").click() # Открываем dropdown
+
+def choose_dropwdown_element_by_text(text): # Будем искать элемент внутри dropdown по тексту
+    elements = driver.find_elements("xpath", "//div[@id='withOptGroup']//div[contains(@id, 'react-select')]")
+    for element in elements:
+        if text in element.text:
+            return element # Возвращаем нужный элемент из dropdown по тексту
+
+choose_dropwdown_element_by_text("Another root option").click() # Кликаем на выбранный элемент
+```
+
+## Работа с мультиселектом
+**Алгоритм работы:**
+- Вводим часть слова или полностью все слово
+- Нажимаем либо TAB, либо ENTER, по сути не важно, так как обе кнопки сработают как и в жизни (подтянут первое выпавшее в списке значение) так как по умолчанию оно и предлагается
+
+Лучше прописывать слово полностью, а не его часть, чтобы случайно не был выбран другой элемент списка.
+```python
+MULTISELECT_LOCATOR = ('xpath', '//input[@id="react-select-4-input"]')
+
+driver.get('https://demoqa.com/select-menu')
+
+driver.find_element(*MULTISELECT_LOCATOR).send_keys("Gre")
+driver.find_element(*MULTISELECT_LOCATOR).send_keys(Keys.TAB)
+
+driver.find_element(*MULTISELECT_LOCATOR).send_keys("Blue")
+driver.find_element(*MULTISELECT_LOCATOR).send_keys(Keys.ENTER)
+```
+
 # DevTools
 
-- `setTimeout(function() { debugger; }, 5000)` - код, который включит отложенный старт дебаг-режима в devtools - останавливает выполнене любого кода на странице через 5 сек. необходимо открыть DevTools и перейти на вкладку "Console", вставить код и нажать Enter
+- `setTimeout(function() { debugger; }, 5000)` - код, который включит отложенный старт дебаг-режима в devtools - останавливает выполнене любого кода на странице через 5 сек. необходимо открыть DevTools и перейти на вкладку "Console", вставить код и нажать Enter, открыть нужный нам элемент и ждем, далее инспектируем все, что нам нужно
