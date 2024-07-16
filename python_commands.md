@@ -4,9 +4,11 @@
 	- [flake8](#flake8)
 	- [os](#os)
 - [Работа с виртуальным окружением](#работа-с-виртуальным-окружением)
+- [allure](#allure)
 - [assert](#assert)
 - [in](#in)
 - [pickle](#pickle)
+- [классы](#классы)
 
 # Install
 ```python
@@ -136,12 +138,13 @@ deactivate
 
 exit()
 
-
+# allure
+```python
 $ pip install allure-pytest
 $ py.test --alluredir=%allure_result_folder% ./tests
 $ allure serve %allure_result_folder%
 https://pypi.org/project/allure-pytest/
-
+```
 # Трехместное выражение if/else в Python
 
 ```python
@@ -158,6 +161,7 @@ rez = a + b if a < b else a - b.
 ```
 
 # assert
+
 ```python
 assert True, 'Print message'
 > 
@@ -258,3 +262,21 @@ cookies = pickle.load(open(os.getcwd()+"/cookies/cookies.pkl", "rb"))
 Операции pickle:
 - wb - write binary: записать в бинарном формате
 - rb - read binary: считать из  бинарного формата
+
+
+# Классы
+
+```python
+@dataclass
+class Card:
+    summary: str = None
+    owner: str = None
+    state: str = "todo"
+    id: int = field(default=None, compare=False)
+
+    @classmethod
+    def from_dict(cls, d):
+        return Card(**d)
+    def to_dict(self):
+        return asdict(self)
+```

@@ -760,26 +760,26 @@ element_is_visible(VISIBLE_AFTER_BUTTON, 5)
 
 В модуле expected_conditions есть много других правил, которые позволяют реализовать необходимые ожидания:
 
-- alert_is_present - Ожидает, что появится всплывающее окно (alert) `wait.until(EC.alert_is_present())` - в метод не передается никакой аргумент!
-- element_located_to_be_selected
-- element_located_selection_state_to_be - Ожидает, что состояние выбора элемента (по его локатору) будет соответствовать заданному состоянию (True/False). `wait.until(EC.element_located_selection_state_to_be((By.ID, 'element_id'), True))`
-- element_selection_state_to_be - Ожидает, что состояние выбора элемента будет соответствовать заданному состоянию (True/False) `wait.until(EC.element_selection_state_to_be((By.ID, 'element_id'), True))`
+- **alert_is_present** - Ожидает, что появится всплывающее окно (alert) `wait.until(EC.alert_is_present())` - в метод не передается никакой аргумент!
+- **element_located_to_be_selected**
+- **element_located_selection_state_to_be** - Ожидает, что состояние выбора элемента (по его локатору) будет соответствовать заданному состоянию (True/False). `wait.until(EC.element_located_selection_state_to_be((By.ID, 'element_id'), True))`
+- **element_selection_state_to_be** - Ожидает, что состояние выбора элемента будет соответствовать заданному состоянию (True/False) `wait.until(EC.element_selection_state_to_be((By.ID, 'element_id'), True))`
 - **element_to_be_clickable** - Ожидает, что элемент станет кликабельным. `wait.until(EC.element_to_be_clickable((By.ID, 'element_id')))`
-- element_to_be_selected - Ожидает, что элемент будет выбран. `wait.until(EC.element_to_be_selected((By.ID, 'element_id')))`
-- frame_to_be_available_and_switch_to_it - Ожидает, что фрейм будет доступен и переключается на него `wait.until(EC.frame_to_be_available_and_switch_to_it((By.NAME, 'frame_name')))`
+- **element_to_be_selected** - Ожидает, что элемент будет выбран. `wait.until(EC.element_to_be_selected((By.ID, 'element_id')))`
+- **frame_to_be_available_and_switch_to_it** - Ожидает, что фрейм будет доступен и переключается на него `wait.until(EC.frame_to_be_available_and_switch_to_it((By.NAME, 'frame_name')))`
 - **invisibility_of_element_located** - Ожидание проверки того, является ли элемент невидимым или он исчез из DOM. `wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, 'css_selector')))`
-- presence_of_all_elements_located
-- presence_of_element_located - Ожидает, что элемент будет присутствовать в DOM. `wait.until(EC.presence_of_element_located((By.ID, 'element_id')))`
+- **presence_of_all_elements_located**
+- **presence_of_element_located** - Ожидает, что элемент будет присутствовать в DOM. `wait.until(EC.presence_of_element_located((By.ID, 'element_id')))`
 - **text_to_be_present_in_element** - Ожидает, что определенный текст появится в элементе. `wait.until(EC.text_to_be_present_in_element((By.ID, 'element_id'), 'expected_text')))`
-- text_to_be_present_in_element_value - Ожидает, что определенный текст появится в значении элемента (например, в поле ввода). `wait.until(EC.text_to_be_present_in_element_value((By.ID, 'element_id'), 'expected_text')))`
-- title_is - Ожидает, что заголовок страницы будет точно соответствовать заданному тексту `wait.until(EC.title_is('Expected Title'))`
-- title_contains -  Ожидает, что заголовок страницы будет содержать заданный текст `wait.until(EC.title_contains('Expected Text'))`
-- staleness_of
+- **text_to_be_present_in_element_value** - Ожидает, что определенный текст появится в значении элемента (например, в поле ввода). `wait.until(EC.text_to_be_present_in_element_value((By.ID, 'element_id'), 'expected_text')))`
+- **title_is** - Ожидает, что заголовок страницы будет точно соответствовать заданному тексту `wait.until(EC.title_is('Expected Title'))`
+- **title_contains** -  Ожидает, что заголовок страницы будет содержать заданный текст `wait.until(EC.title_contains('Expected Text'))`
+- **staleness_of**
 - **visibility_of_element_located** - Ожидание проверки того, что элемент присутствует в DOM и виден визуально. Видимость означает, что элемент не только отображается но также имеет высоту и ширину, которые больше 0. `wait.until(EC.visibility_of_element_located((By.XPATH, 'xpath_expression')))`
-- visibility_of - Ожидает, что элемент станет видимым и отображаемым на странице. `element = wait.until(EC.visibility_of(driver.find_element(By.ID, 'element_id')))`
+- **visibility_of** - Ожидает, что элемент станет видимым и отображаемым на странице. `element = wait.until(EC.visibility_of(driver.find_element(By.ID, 'element_id')))`
 - `wait.until(EC.url_changes(expected_link))` 
-- url_contains - Ожидает, что URL страницы будет содержать заданный текст. `wait.until(EC.url_contains('example'))`
-- url_to_be - Ожидает, что URL страницы будет точно соответствовать заданному URL `wait.until(EC.url_to_be('https://example.com'))`
+- **url_contains** - Ожидает, что URL страницы будет содержать заданный текст. `wait.until(EC.url_contains('example'))`
+- **url_to_be** - Ожидает, что URL страницы будет точно соответствовать заданному URL `wait.until(EC.url_to_be('https://example.com'))`
 
 Описание каждого правила можно найти на [сайте](https://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.support.expected_conditions).
 
