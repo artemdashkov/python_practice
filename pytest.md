@@ -3,7 +3,7 @@
 - [Фикстуры](#Фикстуры)
 - Параметризация
 - [Маркеры](#Маркеры)
-- Флаги
+- [Флаги](#Флаги)
 
 # Установка
 
@@ -98,10 +98,83 @@ py.test --instafail  # if pytest-instafail is installed, show errors and failure
 - пользовательские  - для выбора тестов, которые мы собираемся запускать
 
 ## Встроенные маркеры
-- @pytest.mark.parametrize(argnames, argvalues, indirect, ids, scope)
-- @pytest.mark.skip(reason=None)
-- @pytest.mark.skipif(condition, ..., *, reason)
-- @pytest.mark.xfail(condition, ..., *, reason, run=True, raises=None, strict=xfail_strict)
+Часто используемые:
+- ```@pytest.mark.parametrize()```
+- ```@pytest.mark.skip()```
+- ```@pytest.mark.skipif()```
+- ```@pytest.mark.xfail()```
 
-- @pytest.mark.filterwarnings(warning)
-- @pytest.mark.usefixtures(fixturename1, fixturename2, ...): 
+Редко используемые:
+- ```@pytest.mark.filterwarnings()```
+- ```@pytest.mark.usefixtures()```
+
+
+### @pytest.mark.parametrize()
+- ```@pytest.mark.parametrize``` - (argnames, argvalues, indirect, ids, scope) - This marker calls a test function multiple times, passing in different arguments in turn
+
+### @pytest.mark.skip()
+- ```@pytest.mark.skip(reason=None)``` - The skip marker allows us to skip a test
+```python
+@pytest.mark.skip(reason="Card doesn't support < comparison yet")
+def test_less_than():
+c1 = Card("a task")
+c2 = Card("b task")
+assert c1 < c2
+```
+
+### @pytest.mark.skipif()
+- ```@pytest.mark.skipif(condition, ..., *, reason)``` - This marker skips the test if any of the conditions are True.
+
+```python
+from packaging.version import parse
+
+@pytest.mark.skipif(
+    parse(cards.__version__).major < 2, reason="Card < comparison not supported in 1.x",)
+def test_less_than():
+    c1 = Card("a task")
+    c2 = Card("b task")
+    assert c1 < c2
+```
+
+### @pytest.mark.xfail()
+- ```@pytest.mark.xfail(condition, ..., *, reason, run=True, raises=None, strict=xfail_strict)``` - If we want to run all tests, even those that we know will fail, we can use the xfail marker. This marker tells pytest that we expect the test to fail
+    -  ```run=False``` - The test is run anyway, by default, but the run parameter can be used to tell pytest to not run the test by setting run=False
+    -  ```raises``` - allows you to provide an exception type or a tuple of exception types that you want to result in an xfail
+    - ```strict``` - tells pytest if passing tests should be marked as XPASS (strict=False) or FAIL, strict=True
+
+```python
+@pytest.mark.xfail(
+parse(cards.__version__).major < 2,
+reason="Card < comparison not supported in 1.x",
+)
+def test_less_than():
+c1 = Card("a task")
+c2 = Card("b task")
+assert c1 < c2
+@pytest.mark.xfail(reason="XPASS demo")
+def test_xpass():
+c1 = Card("a task")
+c2 = Card("a task")
+assert c1 == c2
+@pytest.mark.xfail(reason="strict demo", strict=True)
+def test_xfail_strict():
+c1 = Card("a task")
+c2 = Card("a task")
+assert c1 == c2
+```
+
+### @pytest.mark.filterwarnings()
+- ```@pytest.mark.filterwarnings(warning)``` - 
+
+### @pytest.mark.usefixtures()
+- ```@pytest.mark.usefixtures(fixturename1, fixturename2, ...)``` - This marker marks tests as needing all the specified fixtures.
+
+
+
+# Флаги
+- -v --verbose - 
+- -r -tells pytest to report reasons for different test results at the end of the session
+- -ra - The a in -ra stands for “all except passed.” The -ra flag is therefore the most useful, as we almost always want to know the reason why certain tests did not pass.
+- -rfE - The default display is the same as passing in. f for failed tests; E for errors
+- -a
+- --tb=short
