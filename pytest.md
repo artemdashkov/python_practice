@@ -4,6 +4,7 @@
 - Параметризация
 - [Маркеры](#Маркеры)
 - [Флаги](#Флаги)
+- [pytest.ini](#pytestini)
 
 # Установка
 
@@ -139,8 +140,14 @@ def test_less_than():
 ### @pytest.mark.xfail()
 - ```@pytest.mark.xfail(condition, ..., *, reason, run=True, raises=None, strict=xfail_strict)``` - If we want to run all tests, even those that we know will fail, we can use the xfail marker. This marker tells pytest that we expect the test to fail
     -  ```run=False``` - The test is run anyway, by default, but the run parameter can be used to tell pytest to not run the test by setting run=False
-    -  ```raises``` - allows you to provide an exception type or a tuple of exception types that you want to result in an xfail
-    - ```strict``` - tells pytest if passing tests should be marked as XPASS (strict=False) or FAIL, strict=True
+    -  ```raises``` - allows you to provide an exception type or a tuple of exception types that you want to result in an xfail. 
+    - ```strict``` - tells pytest if passing tests should be marked as XPASS (strict=False) or FAIL, strict=True.  
+
+Status of xfail:
+- XFAIL - когда тест не прошел. “You were right, it did fail,” 
+- XPASS - когда тест прошел (with no strict setting). “Good news, the test you
+thought would fail just passed.” 
+- FAILED - когда тест прошел, но strict=true. “You thought it would fail, but it didn’t. You were wrong.”
 
 ```python
 @pytest.mark.xfail(
@@ -178,3 +185,6 @@ assert c1 == c2
 - -rfE - The default display is the same as passing in. f for failed tests; E for errors
 - -a
 - --tb=short
+
+# pytest.ini
+pytest.ini - the main configuration file for pytest.
