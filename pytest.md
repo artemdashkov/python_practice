@@ -170,6 +170,10 @@ c2 = Card("a task")
 assert c1 == c2
 ```
 
+## Пользовательские маркеры
+Custom markers are markers we make up ourselves and apply to tests. Think of them like tags or labels. Custom markers can be used to select tests to run
+or skip.
+
 ### @pytest.mark.filterwarnings()
 - ```@pytest.mark.filterwarnings(warning)``` - 
 
@@ -184,7 +188,13 @@ assert c1 == c2
 - -ra - The a in -ra stands for “all except passed.” The -ra flag is therefore the most useful, as we almost always want to know the reason why certain tests did not pass.
 - -rfE - The default display is the same as passing in. f for failed tests; E for errors
 - -a
+- -m для запуска маркированных тестов,  `pytest -v -m exception test_start.py` - означает, запустить тесты с маркером `exception`
 - --tb=short
 
 # pytest.ini
 pytest.ini - the main configuration file for pytest.
+```python
+[pytest]
+markers =
+    smoke:  subset of tests
+```
