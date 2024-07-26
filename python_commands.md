@@ -83,7 +83,7 @@ pip freeze > requirements.txt	# все зависимости скопирова
 
 	
 
-## poetry
+# poetry
 Установка Windows (Powershell)
 	официальная документация https://python-poetry.org/docs/#installing-with-the-official-installer
 	в powershell: (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | py -

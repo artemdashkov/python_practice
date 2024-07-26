@@ -171,8 +171,9 @@ assert c1 == c2
 ```
 
 ## Пользовательские маркеры
-Custom markers are markers we make up ourselves and apply to tests. Think of them like tags or labels. Custom markers can be used to select tests to run
-or skip.
+Custom markers are markers we make up ourselves and apply to tests. Think of them like tags or labels. Custom markers can be used to select tests to run or skip.
+
+Пользовательские маркеры необходимо регистровать в файле pytest.ini, иначе будет появляться предупредительное сообщение о неизвестном маркере. 
 
 ### @pytest.mark.filterwarnings()
 - ```@pytest.mark.filterwarnings(warning)``` - 
@@ -180,7 +181,30 @@ or skip.
 ### @pytest.mark.usefixtures()
 - ```@pytest.mark.usefixtures(fixturename1, fixturename2, ...)``` - This marker marks tests as needing all the specified fixtures.
 
+## Маркировка файлов, классов и параметров
+```python
+import pytest
+from cards import Card, InvalidCardId
+pytestmark = pytest.mark.finish
+```
+If pytest sees a `pytestmark` attribute in a test module, it will apply the marker(s) to all the tests in that module. If you want to apply more than one marker to the file, you can use a list form: `pytestmark = [pytest.mark.marker_one, pytest.mark.marker_two]`.
 
+Another way to mark multiple tests at once is to have tests in a class and use class-level markers:
+```python
+@pytest.mark.smoke
+class TestFinish:
+def test_finish_from_todo(self, cards_db):
+i = cards_db.add_card(Card("foo", state="todo"))
+cards_db.finish(i)
+c = cards_db.get_card(i)
+assert c.state == "done"
+def test_finish_from_in_prog(self, cards_db):
+i = cards_db.add_card(Card("foo", state="in prog"))
+cards_db.finish(i)
+c = cards_db.get_card(i)
+assert c.state == "done
+```
+The test class TestFinish is marked with @pytest.mark.smoke. Marking a test class like this effectively marks each test method in the class with the same marker. 
 
 # Флаги
 - -v --verbose - 
