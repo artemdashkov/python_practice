@@ -206,6 +206,12 @@ assert c.state == "done
 ```
 The test class TestFinish is marked with @pytest.mark.smoke. Marking a test class like this effectively marks each test method in the class with the same marker. 
 
+## Using “and,” “or,” “not,” and Parentheses with Markers
+`pytest -v -m "finish and exception"` - We can run the “finish” tests that deal with exceptions with -m "finish and exception"
+`pytest -v -m "finish and not smoke"` - We can find all the finish tests that are not included in the smoke tests
+`pytest -v -m "(exception or smoke) and (not finish)"` - We can also get fancy and use “and,” “or,” “not,” and parentheses to be very specific about the markers
+` pytest -v -m smoke -k "not TestFinish"` - Let’s run the smoke tests that are not part of the TestFinish class
+
 # Флаги
 - -v --verbose - 
 - -r -tells pytest to report reasons for different test results at the end of the session
@@ -217,8 +223,12 @@ The test class TestFinish is marked with @pytest.mark.smoke. Marking a test clas
 
 # pytest.ini
 pytest.ini - the main configuration file for pytest.
+- `markers`
+- `addopts` - используется для добавления флагов каждый раз при запуске pytest
 ```python
 [pytest]
 markers =
     smoke:  subset of tests
+addopts =
+    --strict-markers
 ```
