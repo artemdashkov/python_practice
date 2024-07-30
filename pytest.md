@@ -220,10 +220,11 @@ The test class TestFinish is marked with @pytest.mark.smoke. Marking a test clas
 - -a
 - -m для запуска маркированных тестов,  `pytest -v -m exception test_start.py` - означает, запустить тесты с маркером `exception`
 - --tb=short
+- `--strict-markers` - строгое соответствие маркеру. если маркера нет в Pytest.ini, то тест не начнется
 
 # pytest.ini
 pytest.ini - the main configuration file for pytest.
-- `markers`
+- `markers` - добавление маркеров
 - `addopts` - используется для добавления флагов каждый раз при запуске pytest
 ```python
 [pytest]
