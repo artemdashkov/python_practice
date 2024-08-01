@@ -1,10 +1,11 @@
 - Установка
 - [Правила](#Правила)
 - [Фикстуры](#Фикстуры)
-- Параметризация
+- [Параметризация](#Параметризация)
 - [Маркеры](#Маркеры)
 - [Флаги](#Флаги)
 - [pytest.ini](#pytestini)
+- [Сторонние программы](#Сторонние-программы)
 
 # Установка
 
@@ -31,64 +32,39 @@ PyTest: правила запуска тестов
 -внутри всех этих файлов находит тестовые функции по следующему правилу:
 	-все тесты, название которых начинается с test, которые находятся вне классов
 	-все тесты, название которых начинается с test внутри классов, имя которых начинается с Test (и без метода __init__ внутри класса)
-	
+
+# Общие команды
+- pytest --markers lists all available markers
+
 Параметры pytest:
 	-v (verbose, то есть подробный), то в отчёт добавится дополнительная информация со списком тестов и статусом их прохождения
 	py.test test_sample.py -v  # outputs verbose messages
 	py.test -q test_sample.py  # omit filename output
 	python -m pytest -q test_sample.py  # calling pytest through python
 	py.test --markers  # show available markers
-# In order to create a reusable marker.
-/*
-# content of pytest.ini
-[pytest]
-markers =
-    webtest: mark a test as a webtest.
-*/
-
-py.test -k "TestClass and not test_one"  # only run tests with names that match the "string expression"
-py.test test_server.py::TestClass::test_method  # cnly run tests that match the node ID
-py.test -x  # stop after first failure
-py.test --maxfail=2  # stop after two failures
-py.test --showlocals  # show local variables in tracebacks
-py.test -l  # (shortcut)
-py.test --tb=long  # the default informative traceback formatting
-py.test --tb=native  # the Python standard library formatting
-py.test --tb=short  # a shorter traceback format
-py.test --tb=line  # only one line per failure
-py.test --tb=no  # no tracebak output
-py.test -x --pdb # drop to PDB on first failure, then end test session
-py.test --durations=10  # list of the slowest 10 test durations.
-py.test --maxfail=2 -rf  # exit after 2 failures, report fail info.
-py.test -n 4  # send tests to multiple CPUs
-py.test -m slowest  # run tests with decorator @pytest.mark.slowest or slowest = pytest.mark.slowest; @slowest
-py.test --traceconfig  # find out which py.test plugins are active in your environment.
-py.test --instafail  # if pytest-instafail is installed, show errors and failures instantly instead of waiting until the end of test suite.
-
-# Test using parametrize
-/*
-    import pytest
-
-    @pytest.mark.parametrize(
-        ('n', 'expected'), [
-            (1, 2),
-            (2, 3),
-            (3, 4),
-            (4, 5),
-            pytest.mark.xfail((1, 0)),
-            pytest.mark.xfail(reason="some bug")((1, 0)),
-            pytest.mark.skipif('sys.version_info >= (3,0)')((10, 11)),
-        ]
-    )
-    def test_increment(n, expected):
-        assert n + 1 == expected
-*/
 
 # Фикстуры
 
 Фикстуры в контексте PyTest — это вспомогательные функции для наших тестов, которые не являются частью тестового сценария. Одно из распространенных применений фикстур — это подготовка тестового окружения и очистка тестового окружения и данных после завершения теста.
 
 Классический способ работы с фикстурами — создание setup- и teardown-методов в файле с тестами.
+
+# Параметризация
+```python
+@pytest.mark.parametrize(
+    ('n', 'expected'), [
+        (1, 2),
+        (2, 3),
+        (3, 4),
+        (4, 5),
+        pytest.mark.xfail((1, 0)),
+        pytest.mark.xfail(reason="some bug")((1, 0)),
+        pytest.mark.skipif('sys.version_info >= (3,0)')((10, 11)),
+    ]
+)
+def test_increment(n, expected):
+    assert n + 1 == expected
+```
 
 # Маркеры
 
@@ -213,14 +189,34 @@ The test class TestFinish is marked with @pytest.mark.smoke. Marking a test clas
 ` pytest -v -m smoke -k "not TestFinish"` - Let’s run the smoke tests that are not part of the TestFinish class
 
 # Флаги
-- -v --verbose - 
-- -r -tells pytest to report reasons for different test results at the end of the session
-- -ra - The a in -ra stands for “all except passed.” The -ra flag is therefore the most useful, as we almost always want to know the reason why certain tests did not pass.
-- -rfE - The default display is the same as passing in. f for failed tests; E for errors
-- -a
-- -m для запуска маркированных тестов,  `pytest -v -m exception test_start.py` - означает, запустить тесты с маркером `exception`
-- --tb=short
-- `--strict-markers` - строгое соответствие маркеру. если маркера нет в Pytest.ini, то тест не начнется
+
+- `-r` -tells pytest to report reasons for different test results at the end of the session
+- `-ra` - The a in -ra stands for “all except passed.” The -ra flag is therefore the most useful, as we almost always want to know the reason why certain tests did not pass. tells pytest to list the reason for any test that isn’t passing. This includes fail, error, skip, xfail, and xpass.
+- `-rfE` - The default display is the same as passing in. f for failed tests; E for errors
+- `-a`
+- `-k` "TestClass and not test_one"  # only run tests with names that match the "string expression"
+- `-m` для запуска маркированных тестов,  `pytest -v -m exception test_start.py` - означает, запустить тесты с маркером `exception`. flag can use logic operators and, or, not, and parentheses
+- `-v` --verbose - 
+- `-x`  # stop after first failure
+- `--tb=short`
+- `--strict-markers` - строгое соответствие маркеру. если маркера нет в Pytest.ini, то тест не начнется. tells pytest to raise an error if it sees us using an undeclared marker. The default is a warning.
+
+py.test test_server.py::TestClass::test_method  # cnly run tests that match the node ID
+py.test --maxfail=2  # stop after two failures
+py.test --showlocals  # show local variables in tracebacks
+py.test -l  # (shortcut)
+py.test --tb=long  # the default informative traceback formatting
+py.test --tb=native  # the Python standard library formatting
+py.test --tb=short  # a shorter traceback format
+py.test --tb=line  # only one line per failure
+py.test --tb=no  # no tracebak output
+py.test -x --pdb # drop to PDB on first failure, then end test session
+py.test --durations=10  # list of the slowest 10 test durations.
+py.test --maxfail=2 -rf  # exit after 2 failures, report fail info.
+py.test -n 4  # send tests to multiple CPUs
+py.test -m slowest  # run tests with decorator @pytest.mark.slowest or slowest = pytest.mark.slowest; @slowest
+py.test --traceconfig  # find out which py.test plugins are active in your environment.
+py.test --instafail  # if pytest-instafail is installed, show errors and failures instantly instead of waiting until the end of test suite.
 
 # pytest.ini
 pytest.ini - the main configuration file for pytest.
@@ -233,3 +229,7 @@ markers =
 addopts =
     --strict-markers
 ```
+
+# Сторонние программы
+- **Faker** - is a handy Python package that provides a pytest fixture called
+faker to generate fake data.
