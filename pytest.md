@@ -5,7 +5,12 @@
 - [Маркеры](#Маркеры)
 - [Флаги](#Флаги)
 - [pytest.ini](#pytestini)
+- [conftest.py](#conftestpy)
+- [__init__.py](#initpy)
+- [tox.ini, pyproject.toml, setup.cfg](#toxini-pyprojecttoml-setupcfg)
 - [Сторонние программы](#Сторонние-программы)
+
+
 
 # Установка
 
@@ -219,7 +224,7 @@ py.test --traceconfig  # find out which py.test plugins are active in your envir
 py.test --instafail  # if pytest-instafail is installed, show errors and failures instantly instead of waiting until the end of test suite.
 
 # pytest.ini
-pytest.ini - the main configuration file for pytest.
+`pytest.ini` - the main configuration file for pytest that allows you to change pytest’s default behavior. Its location also defines the pytest root directory, or rootdir
 - `markers` - добавление маркеров
 - `addopts` - используется для добавления флагов каждый раз при запуске pytest
 ```python
@@ -228,6 +233,37 @@ markers =
     smoke:  subset of tests
 addopts =
     --strict-markers
+```
+
+# conftest.py
+`conftest.py` - This file contains fixtures and hook functions. It can exist at the rootdir or in any subdirectory.
+
+# __init__.py
+`__init__.py`: When put into test subdirectories, this file allows you to have identical test file names in multiple test directories.
+
+# tox.ini, pyproject.toml, setup.cfg
+`tox.ini`, `pyproject.toml`, and `setup.cfg`: These files can take the place of pytest.ini. If you already have one of these files in a project, you can use it to save pytest settings.
+
+- `tox.ini` is used by tox, the command-line automated testing tool we take a look at in Chapter 11, tox and Continuous Integration, on page 151.
+- `pyproject.toml` is used for packaging Python projects and can be used to save settings for various tools, including pytest.
+- `setup.cfg` is also used for packaging, and can be used to save pytest settings.
+
+# structure
+```cards_proj
+├── ... top level project files, src dir, docs, etc ...
+├── pytest.ini
+└── tests
+
+├── conftest.py
+├── api
+│ ├── __init__.py
+│ ├── conftest.py
+│ └── ... test files for api ...
+└── cli
+
+├── __init__.py
+├── conftest.py
+└── ... test files for cli ...
 ```
 
 # Сторонние программы
