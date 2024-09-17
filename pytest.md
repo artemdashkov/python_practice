@@ -226,13 +226,25 @@ py.test --instafail  # if pytest-instafail is installed, show errors and failure
 # pytest.ini
 `pytest.ini` - the main configuration file for pytest that allows you to change pytest’s default behavior. Its location also defines the pytest root directory, or rootdir
 - `markers` - добавление маркеров
-- `addopts` - используется для добавления флагов каждый раз при запуске pytest
+- `addopts` - позволяет перечислить флаги pytest, которые мы всегда хотим запускать при каждом запуске pytest.
 ```python
-[pytest]
-markers =
-    smoke:  subset of tests
+[pytest] # The file starts with [pytest] to denote the start of the pytest settings. 
 addopts =
     --strict-markers
+    --strict-config
+    -ra
+
+or addopts = --strict-markers --strict-config -ra
+
+testpaths = tests
+markers =
+    smoke:  subset of tests
+    test_001:
+"""
+--strict-markers tells pytest to raise an error for any unregistered marker
+encountered in the test code as opposed to a warning. Turn this on
+to avoid marker-name typos.
+"""
 ```
 
 # conftest.py
