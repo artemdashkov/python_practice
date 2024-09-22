@@ -170,7 +170,7 @@ assert False, 'Print message'
 > # assert False, 'Print message', AssertionError: Print message
 ```
 
-При выявлении несоответствии в методе assert дальнейший код не выполняется, например:
+**При выявлении несоответствии в методе assert дальнейший код не выполняется, а при положительном assert - дальнейший код выполняется, например**:
 - Assert завершился AssertionError 
 ```python
 value_1 = 3
@@ -184,6 +184,7 @@ Traceback (most recent call last):
     assert value_1 == value_2, "Not equal"
 AssertionError: Not equal
 ```
+
 - Assert завершился без ошибок
 ```python
 value_1 = 3
