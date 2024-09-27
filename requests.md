@@ -4,7 +4,7 @@
 2. https://petstore.swagger.io/
 
 pip install requests
-
+# GET
 ```python
 # GET запрос без передачи параметров
 response = requests.get(
@@ -18,6 +18,7 @@ print('1.\t', response.text) # получить ответ в виде текс�
 print('2.\t', response.json()) # получить ответ в виде json
 print('3.\t', response.status_code) # получить статус код ответа
 print('4.\t', response.json()['status']) # получить значение ключа 'status' из json ответа
+print('4.\t', response.cookies) # получить куки
 ```
 
 ```python
@@ -38,4 +39,38 @@ response = requests.get(
 )
 
 print(response.json()[0]['tags'][0]['name'])
+```
+
+# POST
+```python
+import requests
+
+# POST запрос с JSON телом
+url_pet_post = 'https://petstore.swagger.io/v2/pet'
+body_pet_post = {
+  "id": 0,
+  "category": {
+    "id": 0,
+    "name": "string"
+  },
+  "name": "doggie",
+  "photoUrls": [
+    "string"
+  ],
+  "tags": [
+    {
+      "id": 0,
+      "name": "string"
+    }
+  ],
+  "status": "available"
+}
+response = requests.post(
+    url=url_pet_post,
+    json=body_pet_post,
+    verify=False # при запросе не будет проверяться сертификат, выполняет код, но выводит сообщение, что запроос не безопасный
+)
+
+assert response.status_code == 200
+print(response.json())
 ```
