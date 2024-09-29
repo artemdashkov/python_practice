@@ -42,10 +42,10 @@ print(response.json()[0]['tags'][0]['name'])
 ```
 
 # POST
+## POST запрос с JSON телом
 ```python
 import requests
 
-# POST запрос с JSON телом
 url_pet_post = 'https://petstore.swagger.io/v2/pet'
 body_pet_post = {
   "id": 0,
@@ -73,4 +73,194 @@ response = requests.post(
 
 assert response.status_code == 200
 print(response.json())
+```
+
+## POST запрос с Data/ Files телом
+```python
+response = requests.post(
+  url="https://petstore.swagger.io/v2/pet/1/uploadImage",
+  files={
+    "file": ("unnamed.jpg", open('unnamed.jpg','rb'), 'image/jpeg') 
+  }
+)
+
+print(response.json())
+
+# В случае, если не удается передать файлы через "data", то нужно передавать данные через "files"
+```
+
+# PUT
+```python
+# необходимо передвать все тело, чтобы не потерять данные
+response = requests.put(
+    url="https://petstore.swagger.io/v2/pet",
+    json={
+          "id": 1,
+          "category": {
+            "id": 0,
+            "name": "string"
+          },
+          "name": "Alex",
+          "photoUrls": [
+            "string"
+          ],
+          "tags": [
+            {
+              "id": 0,
+              "name": "string"
+            }
+          ],
+          "status": "available"
+        }
+)
+
+print(response.json())
+```
+
+# PATCH
+...
+
+# Chains
+```python
+HEADERS = {
+    "Authorization":"any_token"
+}
+
+class TestUsers:
+    # setup
+    def setup(self):
+        requests.post(
+            url="any_url",
+            headers=HEADERS
+        )
+
+    # get
+    def test_patch_user(self):
+        user_list = requests.get(
+            url="any_url",
+            headers=HEADERS
+        )
+
+        user = user_list.json()['items'][0]['uuid']
+        old_user_name = user_list.json()['items'][0]['name']
+        patched_user = requests.patch(
+            url=f'any_utl{user}',
+            headers=HEADERS,
+            json={
+                "name":"QWERTY"
+            }
+        )
+
+        assert old_user_name != patched_user.json()['name']
+```
+
+
+# pydantic
+pip3 install pydantic - установка
+### pydantic - автоматическое преобразование типов
+```python
+from pydantic import BaseModel # Для того чтобы начать работать с дата классами
+
+class UserModel(BaseModel):
+    id: int
+    name: str
+    status: str
+    admin: bool
+
+response = {
+    'id': 145,
+    'name': 'Ivan',
+    'status': 'active',
+    'admin': True
+}
+
+user = UserModel(**response) # распарсивает json объект 'response' в виде полей класса и валидирует их по типам данных
+print(user)
+print(user.admin)
+
+> id=145 name='Ivan' status='active' admin=True
+> True
+```
+
+### pydantic - вывод и отображение ошибок
+
+```python
+from pydantic import BaseModel # Для того чтобы начать работать с дата классами
+
+class UserModel(BaseModel):
+    id: int
+    name: str
+    status: str
+    admin: bool
+
+response = {
+    'id': '145w',
+    'name': 'Ivan',
+    'status': 'active',
+    'admin': True
+}
+
+user = UserModel(**response) 
+
+> Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='145w', input_type=str]
+
+```
+
+### pydantic - Наличие полей в Class и JSON, Опциональные поля
+```python
+from pydantic import BaseModel # Для того чтобы начать работать с дата классами
+from typing import Optional
+
+
+class UserModel(BaseModel):
+    id: int
+    name: str
+    status: str
+    # admin: bool ## например нет поля "admin"
+    admin: Optional[bool] # или  admin: Optional[bool] = None - установка значения 'None' по умолчанию
+response = {
+    'id': 145,
+    'name': 'Ivan',
+    'status': 'active',
+    'admin': True
+}
+
+user = UserModel(**response)
+print(user)
+print(user.admin)
+```
+
+### pydantic - Вложенная модель и dataclass
+```python
+from pydantic import BaseModel # Для того чтобы начать работать с дата классами
+
+class Post(BaseModel):
+    id: int
+    content: str
+
+class DataModel(BaseModel):
+    id: int
+    status: str
+    tags: list[str]
+    posts: dict[str, Post]
+
+
+response = {
+    'id': 1234,
+    'status': 'active',
+    'tags': ['music', 'people', 'greeting'],
+    'posts': {
+        "post_1":   {
+                    'id': 1,
+                    'content': 'Hello my dear friends'
+                    },
+        "post_2":   {
+                    'id': 2,
+                    'content': "Thing it's bad"
+                    }
+                }
+}
+
+model = DataModel(**response)
+print(model.posts["post_1"].content)
 ```
