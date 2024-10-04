@@ -54,6 +54,8 @@ PyTest: правила запуска тестов
 
 Классический способ работы с фикстурами — создание setup- и teardown-методов в файле с тестами.
 
+`pytest --fixtures -v` - показать все фикстуры
+
 # Параметризация
 ```python
 @pytest.mark.parametrize(
@@ -225,39 +227,73 @@ py.test --instafail  # if pytest-instafail is installed, show errors and failure
 
 # pytest.ini
 `pytest.ini` - the main configuration file for pytest that allows you to change pytest’s default behavior. Its location also defines the pytest root directory, or rootdir
-- `markers` - добавление маркеров
-- `addopts` - позволяет перечислить флаги pytest, которые мы всегда хотим запускать при каждом запуске pytest.
+**Пример файла pytest.ini**
 ```python
 [pytest] # The file starts with [pytest] to denote the start of the pytest settings. 
 addopts =
     --strict-markers
     --strict-config
     -ra
-
-or addopts = --strict-markers --strict-config -ra
-
+# or addopts = --strict-markers --strict-config -ra
 testpaths = tests
 markers =
     smoke:  subset of tests
     test_001:
-"""
---strict-markers tells pytest to raise an error for any unregistered marker
-encountered in the test code as opposed to a warning. Turn this on
-to avoid marker-name typos.
-"""
 ```
+- `addopts` - позволяет перечислить флаги pytest, которые мы всегда хотим запускать при каждом запуске pytest.
+    - `--strict-markers` tells pytest to raise an error for any unregistered marker encountered in the test code as opposed to a warning. Turn this on to avoid marker-name typos.
+    - `--strict-config` tells pytest to raise an error for any difficulty in parsing configuration files. The default is a warning. Turn this on to avoid configuration-file typos going unnoticed
+    - `-ra` tells pytest to display extra test summary information at the end of a test run. The default is to show extra information on only test failures and errors. The a part of -ra tells pytest to show information on everything except passing tests. This adds skipped, xfailed, and
+xpassed to the failure and error tests.
+- `testpaths` - The testpaths setting tells pytest where to look for tests if you haven’t given a file or directory name on the command line. Setting testpaths to tests tells pytest to look in the tests directory.
+- `markers` - добавление маркеров
 
 # conftest.py
 `conftest.py` - This file contains fixtures and hook functions. It can exist at the rootdir or in any subdirectory.
 
 # __init__.py
-`__init__.py`: When put into test subdirectories, this file allows you to have identical test file names in multiple test directories.
+`__init__.py`: When put into test subdirectories, this file allows you to have identical test file names in multiple test directories. If you have __init__.py files in every test subdirectory, you can have the same test file name show up in multiple directories. That’s it—the only reason to
+have a __init__.py file
+```python
+cd /path/to/code/ch8/dup
+$ tree tests_with_init
+tests_with_init
+├── api
+│ ├── __init__.py
+│ └── test_add.py
+├── cli
+│ ├── __init__.py
+│ └── test_add.py
+└── pytest.ini
+```
+
 
 # tox.ini, pyproject.toml, setup.cfg
-`tox.ini`, `pyproject.toml`, and `setup.cfg`: These files can take the place of pytest.ini. If you already have one of these files in a project, you can use it to save pytest settings.
+`tox.ini`, `pyproject.toml`, and `setup.cfg`: These files can take the place of pytest.ini. If you already have one of these files in a project, you can use it to save pytest settings. 
 
-- `tox.ini` is used by tox, the command-line automated testing tool we take a look at in Chapter 11, tox and Continuous Integration, on page 151.
-- `pyproject.toml` is used for packaging Python projects and can be used to save settings for various tools, including pytest.
+## tox.ini
+- `tox.ini` is used by tox, the command-line automated testing tool. It can also include a [pytest] section. And because it’s also an .ini file, the tox.ini example below is
+almost identical to the pytest.ini example shown earlier. The only difference is
+that there will also be a [tox] section.
+```python
+[tox]
+; tox specific settings
+[pytest]
+addopts =
+--strict-markers
+--strict-config
+-ra
+testpaths = tests
+markers =
+smoke: subset of tests
+exception: check for expected exceptions
+```
+
+## pyproject.toml
+- `pyproject.toml` is used for packaging Python projects and can be used to save settings for 
+
+
+various tools, including pytest.
 - `setup.cfg` is also used for packaging, and can be used to save pytest settings.
 
 # structure

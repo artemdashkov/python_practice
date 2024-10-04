@@ -264,3 +264,93 @@ response = {
 model = DataModel(**response)
 print(model.posts["post_1"].content)
 ```
+
+### pydantic - Валидация списков
+```python
+from pydantic import BaseModel
+
+# Ситуация 1
+class ResponseListModel(BaseModel):
+    name: str
+    last_name: Annotated[str, constr(max_length=50)]
+    admin: Optional[bool] = None
+
+response_1 = [
+    {
+        "name": "Ivan",
+        "last_name": "Ivanov"
+    },
+    {
+        "name": "Petr",
+        "last_name": "Petrov"
+    }
+]
+
+model_1 = ([ResponseListModel(**item) for item in response_1])
+
+
+# Ситуация 2
+class MainModel(BaseModel):
+    items: list[ResponseListModel]
+
+response_2 = {
+    'items': [
+    {
+        "name": "Ivan",
+        "last_name": "Ivanov"
+    },
+    {
+        "name": "Petr",
+        "last_name": "Petrov"
+    }
+]}
+
+model_2 = MainModel(**response_2)
+print(model_2.items[0].last_name)
+```
+
+### pydantic - extra_model
+```python
+from pydantic import BaseModel, Extra
+
+class DynamicModel(BaseModel):
+    class Config:
+        extra = 'allow'
+
+class UserModel(DynamicModel):
+    name: str
+    age: int
+    status: str
+    # tarif: str = None
+
+response = {
+    "name": "Ivan",
+    "age": 25,
+    "status": "Helthy",
+     "admin": True
+}
+
+model = UserModel(**response)
+print(model.admin)
+```
+
+### pydantic - Валидаторы
+```python
+from pydantic import BaseModel, field_validator
+
+class ServerLogs(BaseModel):
+    id: int
+    logs: str
+
+    @field_validator('logs')
+    def logs_has_contain_lag(cls, value):
+        if 'lag' not in value.lower():
+            raise ValueError(f"Field doesn't contain the 'lag'")
+        else:
+            return value
+
+response = {
+    "id": 12412,
+    "logs": "dsfdsfsdfsdf"
+}
+```
