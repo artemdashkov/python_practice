@@ -430,10 +430,10 @@ XPATH (XML Path Language) - это язык запросов к элемента
 ```
   Исключением является text, в нем не используется знак @, а дописываются круглые скобки, text()=’текст’, потому что это не атрибут, а параметр!, Примеры:
 ```python
-//div[@class=’table’] # по классу
-//employee[@id=’2’] # по id
-//employee[@id=’1’]/name[text()=’David’] # по тексту
-//name[text()=’John’] # по тексту
+//div[@class="table"] # по классу
+//employee[@id="2"] # по id
+//employee[@id="1"]/name[text()=’David’] # по тексту
+//name[text()="John"] # по тексту
 //div[contains(text(), 'Частичный текст')]   # поиск по частичному совпадению текста, Пример: //p[@class="textCenter title404"][contains(text(), '404')]
 ```
 
