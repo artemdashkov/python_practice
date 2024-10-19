@@ -231,6 +231,32 @@ print (ur_1 not in ur_2)
 # True
 ```
 
+# range
+```python
+a_1 = range(5)
+a_2 = list(a_1) 
+
+print(a_1)		> range(0, 5)
+print(a_2)		> [0, 1, 2, 3, 4]
+```
+
+```python
+c_1 = range(0, 50, 10)
+c_2 = list(c_1)
+
+print(c_1)		> range(0, 50, 10)
+print(c_2)		> [0, 10, 20, 30, 40]
+```
+
+```python
+a_1 = range(10, 0, -1)
+a_2 = list(a_1)
+
+print(a_1)		range(10, 0, -1)
+print(a_2)		[10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+```
+
+
 # random
 
 ### random.randint и random.randrange
@@ -238,8 +264,8 @@ print (ur_1 not in ur_2)
 import random
 
 """ Функции randint и randrange возвращают целое число. """
-number = random.randint(l, 10) # вернет значение от 1 до 10, оба значения включены в диапазон
-number = random.randrange(lO) # вернет значение от 0 до 9
+number = random.randint(1, 10) # вернет значение от 1 до 10, оба значения включены в диапазон
+number = random.randrange(10) # вернет значение от 0 до 9
 number = random.randrange(5,10) # вернет значение от 5 до 9
 number = random.randrange(1, 102, 10) # вернет одно значение из списка [1, 11, 21, 31, 41, 51, 61, 71, 81, 91, 101]
 ```
@@ -303,7 +329,14 @@ cookies = pickle.load(open(os.getcwd()+"/cookies/cookies.pkl", "rb"))
 Класс - это программный код, который задает атрибуты данных и методы для объекта определенного типа. класс - это описание свойств объекта.
 Экземпляр класса - объект, который создается на основе класса.
 
+
+
+## dataclass
+
+
 ```python
+from dataclasses import dataclass 
+
 @dataclass
 class Card:
     summary: str = None
