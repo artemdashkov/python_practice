@@ -10,6 +10,8 @@
 - [in](#in)
 - [pickle](#pickle)
 - [классы](#классы)
+	- [@dataclass](#dataclass)
+	- [@staticmethod](#staticmethod)
 
 # Install
 ```python
@@ -331,9 +333,7 @@ cookies = pickle.load(open(os.getcwd()+"/cookies/cookies.pkl", "rb"))
 
 
 
-## dataclass
-
-
+## @dataclass
 ```python
 from dataclasses import dataclass 
 
@@ -350,6 +350,44 @@ class Card:
     def to_dict(self):
         return asdict(self)
 ```
+
+## @staticmethod
+`@staticmethod` в Python — это декоратор, который используется для определения статического метода внутри класса. 
+Статический метод не требует доступа к экземпляру класса (то есть объекту, созданному из этого класса) или к самому классу. 
+Он может быть вызван как через сам класс, так и через экземпляры класса.
+
+Вот основные особенности статических методов:
+1. Нет доступа к `self` и `cls`: Поскольку статический метод не привязан ни к экземпляру, ни к классу, он не принимает автоматически аргументы self (для экземпляра) или cls (для класса).
+2. Пользовательские функции: Статические методы могут использоваться для того, чтобы группировать функции, которые логически относятся к классу, даже если они не работают с его экземплярами или атрибутами класса.
+3. Вызов: Их можно вызывать как через экземпляр класса, так и через сам класс.
+
+Пример использования:
+```python
+class MyClass:  
+    @staticmethod
+    def my_static_method(x, y):  
+        return x + y  
+
+# Вызов статического метода через класс  
+result1 = MyClass.my_static_method(5, 3)  
+print(result1)  # Вывод: 8  
+
+# Вызов статического метода через экземпляр класса  
+obj = MyClass()  
+result2 = obj.my_static_method(10, 20)  
+print(result2)  # Вывод: 30  
+```
+
+Пример использования из проекта:
+```python
+class Common:
+
+	@staticmethod
+	def skip_if_eng_lang_and_fca_license(cur_language, cur_country):
+		if cur_country == "gb" and cur_language == "":
+			pytest.skip("Current test case not available for the Eng language and FCA license")
+```
+
 
 
 # with, as
