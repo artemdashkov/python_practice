@@ -10,6 +10,8 @@
 - [in](#in)
 - [pickle](#pickle)
 - [классы](#классы)
+	- [@Наследование](#наследование)
+	- [@abstractmethod](#abstractmethod)
 	- [@dataclass](#dataclass)
 	- [@staticmethod](#staticmethod)
 
@@ -331,7 +333,144 @@ cookies = pickle.load(open(os.getcwd()+"/cookies/cookies.pkl", "rb"))
 Класс - это программный код, который задает атрибуты данных и методы для объекта определенного типа. класс - это описание свойств объекта.
 Экземпляр класса - объект, который создается на основе класса.
 
+## Наследование
+Наследование - это механизм, который позволяет создавать новый класс на основе уже существующего, наследуя его свойства и методы. Это способствует повторному использованию кода и упрощает его поддержку.
 
+Вот основные моменты о наследовании классов в Python:
+1. Создание базового класса: Это класс, от которого будут наследоваться другие классы.
+2. Создание производного класса: Это класс, который наследует свойства и методы базового класса.
+
+```python
+# Определяем базовый класс  
+class Animal:  
+    def __init__(self, name):  
+        self.name = name  
+
+    def speak(self):  
+        return "Animal sound"  
+
+# Определяем производный класс  
+class Dog(Animal):  
+    def speak(self):  
+        return "Bark"  
+
+class Cat(Animal):  
+    def speak(self):  
+        return "Meow"
+
+class Cow(Animal):
+    def __init__(self, name, weight):
+        Animal.__init__(self, name)  # super().__init__(name)
+        self.weight = weight
+    def speak(self):
+        return "Moo"
+
+class 
+
+# Создаем экземпляры производных классов  
+dog = Dog("Rex")  
+cat = Cat("Mittens") 
+cow = Cow("Marta", 300)
+
+# Вызываем метод speak  
+print(dog.name + " says: " + dog.speak())  # Rex says: Bark  
+print(cat.name + " says: " + cat.speak())  # Mittens says: Meow 
+print(cow.name + " says: " + cow.speak(), "and weight is: " + str(cow.weight)  # Marta says: Moo and weight is: 300
+```
+
+### Особенности при наследовании классов 
+1. Ключевое слово `super()`: Используется для вызова методов базового класса.
+```python
+class Dog(Animal):  
+    def __init__(self, name, breed):  
+        super().__init__(name)  # Вызов конструктора базового класса  
+        self.breed = breed  
+```
+2. Множественное наследование: Класс может наследовать от нескольких классов.
+```python
+class Canine:  
+    def bark(self):  
+        return "Woof!"  
+
+class Pet:  
+    def play(self):  
+        return "Playing!"  
+
+class Dog(Canine, Pet):  
+    pass 
+```
+3. Переопределение методов: Метод в производном классе может переопределять метод базового класса.
+4. Абстрактные классы: Используются для создания интерфейсов. Для этого используется модуль abc.
+```python
+from abc import ABC, abstractmethod  
+
+class Animal(ABC):  
+    @abstractmethod  
+    def speak(self):  
+        pass  
+
+class Dog(Animal):  
+    def speak(self):  
+        return "Bark"  
+```
+
+## @abstractmethod
+Абстрактные классы в Python позволяют создавать базовые классы с определенными методами, которые должны быть реализованы в производных классах. Это полезно для определения интерфейса, который обязаны соблюдать подклассы. Для работы с абстрактными классами в Python используется модуль abc.
+
+**Основные элементы абстрактных классов**
+1. Модуль abc: Импортирует необходимые декораторы и классы для создания абстрактных классов.
+2. Декоратор @abstractmethod: Используется для определения абстрактного метода, который должен быть реализован в производных классах.
+
+```python
+from abc import ABC, abstractmethod  
+
+# Определяем абстрактный класс  
+class Animal(ABC):  
+
+    @abstractmethod  
+    def speak(self):  
+        pass  # Абстрактный метод без реализации  
+
+    @abstractmethod  
+    def move(self):  
+        pass  # Другой абстрактный метод  
+
+# Определяем производный класс  
+class Dog(Animal):  
+    
+    def speak(self):  
+        return "Bark"  
+
+    def move(self):  
+        return "Run"  
+
+# Еще один производный класс  
+class Bird(Animal):  
+
+    def speak(self):  
+        return "Tweet"  
+
+    def move(self):  
+        return "Fly"  
+
+# Создаем экземпляры производных классов  
+dog = Dog()  
+bird = Bird()  
+
+# Вызываем методы  
+print(dog.speak())  # Output: Bark  
+print(dog.move())   # Output: Run  
+print(bird.speak()) # Output: Tweet  
+print(bird.move())  # Output: Fly 
+```
+**Особенности абстрактных классов**
+1. Невозможность создания экземпляра: Нельзя создать экземпляр абстрактного класса напрямую. Например, animal = Animal() вызовет ошибку TypeError.
+2. Наследование: Продуктовые классы должны реализовывать все абстрактные методы базового класса, иначе они также станут абстрактными.
+3. Дополнительные методы: Абстрактный класс может иметь и обычные методы с реализацией.
+
+**Заключение**
+
+Абстрактные классы являются мощным инструментом для обеспечения соблюдения интерфейсов в иерархиях классов. Они способствуют созданию более структурированного, поддерживаемого и понятного кода. Использование абстрактных классов помогает определить, какие методы должны быть реализованы в производных классах, что делает код более предсказуемым и удобным для понимания.
 
 ## @dataclass
 ```python
@@ -350,6 +489,7 @@ class Card:
     def to_dict(self):
         return asdict(self)
 ```
+
 
 ## @staticmethod
 `@staticmethod` в Python — это декоратор, который используется для определения статического метода внутри класса. 
