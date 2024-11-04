@@ -61,6 +61,7 @@ https://sites.google.com/chromium.org/driver/downloads
 - **pip3 list** -перечень всех установленных библиотек
 
 - **pip3 freeze > requirements.txt** - создает в папке venv файл requirements.txt с перечнем всех исользуемых в проекте библиотек
+- **pip show selenium** - показать версию selenium
 
 # ИМПОРТЫ / КЛАССЫ
 - **from selenium import webdriver** - webdriver это и есть набор команд для управления браузером
@@ -92,7 +93,12 @@ prefs = {
     'download.default_directory': f'{os.getcwd()}\\downloads'
 }
 chrome_options.add_experimental_option('prefs', prefs) # add_experimental_option() - опции, которые не доступны из коробки, "prefs" - зарезервированное имя, которое бует подтягивать настройки
+
 ```
+### Ошибка при инициалиазации
+!!! ЕСЛИ ПРИ ИНИЦИАЛИЗАЦИИ ВОЗНИКАЕТ ОШИБКА ТИПА `OSError: [WinError 193] %1 не является приложением Win32`, ТО НЕОБХОДИМО очистите кеш с chrome с webdrive (УДАЛИТЬ СООТВЕТСТВУЮЩИЕ ПАПКИ) 
+C:\Users\<USER_NAME>\.wdm\drivers\chromedriver\win64
+
 другой способ инициализации
 ```python
 from selenium.webdriver.chrome.options import Options
@@ -769,18 +775,26 @@ element_is_visible(VISIBLE_AFTER_BUTTON, 5)
 - **element_to_be_selected** - Ожидает, что элемент будет выбран. `wait.until(EC.element_to_be_selected((By.ID, 'element_id')))`
 - **frame_to_be_available_and_switch_to_it** - Ожидает, что фрейм будет доступен и переключается на него `wait.until(EC.frame_to_be_available_and_switch_to_it((By.NAME, 'frame_name')))`
 - **invisibility_of_element_located** - Ожидание проверки того, является ли элемент невидимым или он исчез из DOM. `wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, 'css_selector')))`
-- **presence_of_all_elements_located**
+- **new_window_is_opened** - An expectation that a new window will be opened and have the number of windows handles increase
+- **none_of** - An expectation that none of 1 or multiple expected conditions is true.
+- **number_of_windows_to_be** - An expectation for the number of windows to be a certain value
+- **presence_of_all_elements_located** - An expectation for checking that there is at least one element present on a web page.
 - **presence_of_element_located** - Ожидает, что элемент будет присутствовать в DOM. `wait.until(EC.presence_of_element_located((By.ID, 'element_id')))`
 - **text_to_be_present_in_element** - Ожидает, что определенный текст появится в элементе. `wait.until(EC.text_to_be_present_in_element((By.ID, 'element_id'), 'expected_text')))`
+- **text_to_be_present_in_element_attribute** - An expectation for checking if the given text is present in the element’s attribute.
 - **text_to_be_present_in_element_value** - Ожидает, что определенный текст появится в значении элемента (например, в поле ввода). `wait.until(EC.text_to_be_present_in_element_value((By.ID, 'element_id'), 'expected_text')))`
-- **title_is** - Ожидает, что заголовок страницы будет точно соответствовать заданному тексту `wait.until(EC.title_is('Expected Title'))`
 - **title_contains** -  Ожидает, что заголовок страницы будет содержать заданный текст `wait.until(EC.title_contains('Expected Text'))`
-- **staleness_of**
-- **visibility_of_element_located** - Ожидание проверки того, что элемент присутствует в DOM и виден визуально. Видимость означает, что элемент не только отображается но также имеет высоту и ширину, которые больше 0. `wait.until(EC.visibility_of_element_located((By.XPATH, 'xpath_expression')))`
-- **visibility_of** - Ожидает, что элемент станет видимым и отображаемым на странице. `element = wait.until(EC.visibility_of(driver.find_element(By.ID, 'element_id')))`
-- `wait.until(EC.url_changes(expected_link))` 
+- **title_is** - Ожидает, что заголовок страницы будет точно соответствовать заданному тексту `wait.until(EC.title_is('Expected Title'))`
+- **staleness_of** - Wait until an element is no longer attached to the DOM.
+- **url_changes** - An expectation for checking the current url.
 - **url_contains** - Ожидает, что URL страницы будет содержать заданный текст. `wait.until(EC.url_contains('example'))`
+- **url_matches** - An expectation for checking the current url. pattern is the expected pattern. This finds the first occurrence of pattern in the current url and as such does not require an exact full match.
 - **url_to_be** - Ожидает, что URL страницы будет точно соответствовать заданному URL `wait.until(EC.url_to_be('https://example.com'))`
+- **visibility_of** - Ожидает, что элемент станет видимым и отображаемым на странице. `element = wait.until(EC.visibility_of(driver.find_element(By.ID, 'element_id')))`
+- **visibility_of_all_elements_located**
+- **visibility_of_any_elements_located**
+- **visibility_of_element_located** - Ожидание проверки того, что элемент присутствует в DOM и виден визуально. Видимость означает, что элемент не только отображается но также имеет высоту и ширину, которые больше 0. `wait.until(EC.visibility_of_element_located((By.XPATH, 'xpath_expression')))`
+
 
 Описание каждого правила можно найти на [сайте](https://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.support.expected_conditions).
 
