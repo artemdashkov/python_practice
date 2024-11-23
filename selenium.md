@@ -525,7 +525,7 @@ textarea = driver.find_element(By.CSS_SELECTOR, ".tradingView[data-type='trading
 ```
 Для поиска элемента используется следующая форма записи:
 ```python
-div [class*="modal"] [class*="heading_h3"] # * означает, что наименование значения представлено в частичном виде
+div [class*="modal"] [class*="heading_h3"] # * означает, что наименование значения представлено в частичном виде, не работает для XPATH селекторов
 ```
 
 
