@@ -16,6 +16,8 @@
 - [Встроенные функции](#встроенные-функции)
     - [in](#in)
     - [filter](#filter)
+    - [map](#map)
+    - [sorted](#sorted)
     - [range](#range)
     - [pickle](#pickle)
 - [классы](#классы)
@@ -473,6 +475,55 @@ sum_ab = map(add, a, b)
 
 print(list(sum_ab))  # Вывод: [5, 7, 9]  
 ```
+
+## sorted
+В Python функция sorted() используется для сортировки итерируемых объектов, таких как списки, кортежи и строки. Эта функция returns a new sorted list from the elements of any iterable. 
+- sorted() не изменяет оригинальный список — он возвращает новый отсортированный список.
+- Если вы хотите отсортировать список "на месте", можно использовать метод sort(), который вызывается для списков.
+
+```python
+sorted(iterable, key=None, reverse=False)  
+```
+- iterable: объект, который нужно отсортировать (например, список, кортеж).
+- key: (необязательный) функция, которая извлекает ключ для сравнения элементов (по умолчанию используется сам элемент).
+- reverse: (необязательный) если True, сортировка будет в обратном порядке.
+
+1. Сортировка списка чисел:
+```python
+numbers = [5, 2, 9, 1, 5, 6]  
+sorted_numbers = sorted(numbers)  
+print(sorted_numbers)  # Вывод: [1, 2, 5, 5, 6, 9]
+```
+
+2. Сортировка строк:
+```python
+words = ["banana", "apple", "cherry"]  
+sorted_words = sorted(words)  
+print(sorted_words)  # Вывод: ['apple', 'banana', 'cherry']  
+```
+
+3. Сортировка в обратном порядке:
+```python
+sorted_numbers_desc = sorted(numbers, reverse=True)  
+print(sorted_numbers_desc)  # Вывод: [9, 6, 5, 5, 2, 1] 
+```
+
+4. Использование параметра key:
+```python
+# Сортировка по длине строк  
+words = ["banana", "pear", "apple", "cherry"]  
+sorted_by_length = sorted(words, key=len)  
+print(sorted_by_length)  # Вывод: ['pear', 'apple', 'banana', 'cherry']
+```
+
+5. Сортировка словаря по ключам:
+```python
+data = {'b': 1, 'a': 2, 'c': 3}  
+sorted_keys = sorted(data)  
+print(sorted_keys)  # Вывод: ['a', 'b', 'c']  
+```
+
+
 
 ## range
 Функция `range()` генерирует последовательность чисел. Чаще всего функция `range()` используется для создания списков либо в циклах.
