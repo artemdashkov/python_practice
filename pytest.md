@@ -75,6 +75,56 @@ def driver(request):
     driver.quit()
 ```
 
+### scope=""
+- `function` (по умолчанию): фикстура вызывается для каждого теста.
+- `class`: фикстура вызывается один раз для всех тестов в классе.
+- `module`: вызывается один раз для всех тестов в модуле.
+- `session`: вызывается один раз для всей сессии тестирования.
+- `package`: Run once per package, or test directory, regardless of how many test functions or methods or other fixtures in the package use it.
+
+### autouse=True
+Когда вы устанавливаете autouse=True, фикстура автоматически применяется ко всем тестам в том модуле, классе или сессии, где она была определена, в зависимости от её уровня скоупа. Это позволяет избежать необходимости повторного указания фикстуры на каждом уровне, где она должна применяться.
+
+Пример использования:
+```python
+import pytest  
+
+@pytest.fixture(autouse=True)  
+def set_up_and_teardown():  
+    # Подготовка, выполняемая перед каждым тестом  
+    print("\nПодготовка перед тестом")  
+    yield  # Это точка, где выполняются тесты  
+    # Очистка, выполняемая после каждого теста  
+    print("Очистка после теста")  
+
+def test_one():  
+    print("Тест 1")  
+    assert True  
+
+def test_two():  
+    print("Тест 2")  
+    assert True
+
+>>>
+Подготовка перед тестом  
+Тест 1  
+Очистка после теста  
+Подготовка перед тестом  
+Тест 2  
+Очистка после теста  
+```
+
+### Параметризованные фикстуры
+Фикстуры могут быть параметризованы, что позволяет запускать один и тот же тест с различными наборами данных.
+```python
+@pytest.fixture(params=[1, 2, 3])  
+def number(request):  
+    return request.param  
+
+def test_square(number):  
+    assert number * number == number ** 2  
+```
+
 # Параметризация
 ```python
 @pytest.mark.parametrize(
