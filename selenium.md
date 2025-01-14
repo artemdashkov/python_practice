@@ -154,8 +154,11 @@ chrome_options.page_load_strategy = 'none' # вообще ничего не жд
 # prefs
 prefs (от "preference" - предпочтения) - специфичные настройки браузера, которых нет их коробки.
 ```python
+# download_directory = r"C:\path\to\your\download\directory"
+# download_directory = f'{os.getcwd()}\\downloads'
 prefs = {
-    'download.default_directory': f'{os.getcwd()}\\downloads'
+    'download.default_directory': f'{os.getcwd()}\\downloads',
+     "download.prompt_for_download": False,  # Отключаем запросы на подтверждение
 } # позволяет скачать файлы в выбранную директорию
 chrome_options.add_experimental_option('prefs', prefs) # add_experimental_option() - опции, которые не доступны из коробки, "prefs" - зарезервированное имя, которое бует подтягивать настройки
 ```
@@ -846,9 +849,9 @@ An expectation for checking that an element is present on the DOM of a page and 
 locator - used to find the element returns the WebElement once it is located and visible
 
 # Работа с окнами и вкладками
-    Важно!
-    1. в Selenium нет различий между окнами и вкладками.
-    2. при открытии новой вкладки кликом по ссылке автоматического переключения на новое окно/вкладку не произойдет
+#### Важно!!!
+  1. в Selenium нет различий между окнами и вкладками.
+  2. при открытии новой вкладки кликом по ссылке автоматического переключения на новое окно/вкладку не произойдет
 - `driver.current_window_handle` - параметр, который показывает уникальный идентификатор окна (дискриптор), с которым сейчас работает selenium, например: `A6AB6790986A839C856B43849AFF1214`
 - `driver.window_handles` - параметр, который выдает список идентификаторов всех окон, открытых в течение сеанса в selenium, например: `['D6B4ECFADF7A54289E1AF0241759F93B', '330767AB91D52C80723B6973A381BD72']`
 - `driver.switch_to.window(tabs[1])` - переключиться на вторую вкладку, предварительно получить список вкладок `tabs = driver.window_handles`
