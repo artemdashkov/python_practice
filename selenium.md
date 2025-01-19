@@ -811,7 +811,7 @@ element_is_visible(VISIBLE_AFTER_BUTTON, 5)
 - **title_contains** -  Ожидает, что заголовок страницы будет содержать заданный текст `wait.until(EC.title_contains('Expected Text'))`
 - **title_is** - Ожидает, что заголовок страницы будет точно соответствовать заданному тексту `wait.until(EC.title_is('Expected Title'))`
 - **staleness_of** - Wait until an element is no longer attached to the DOM.
-- **url_changes** - An expectation for checking the current url.
+- **url_changes** - An expectation for checking the current url. `WebDriverWait(driver, 10).until(EC.url_changes(driver.current_url))`
 - **url_contains** - Ожидает, что URL страницы будет содержать заданный текст. `wait.until(EC.url_contains('example'))`
 - **url_matches** - An expectation for checking the current url. pattern is the expected pattern. This finds the first occurrence of pattern in the current url and as such does not require an exact full match.
 - **url_to_be** - Ожидает, что URL страницы будет точно соответствовать заданному URL `wait.until(EC.url_to_be('https://example.com'))`
