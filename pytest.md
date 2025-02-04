@@ -56,6 +56,28 @@ PyTest: правила запуска тестов
 
 `pytest --fixtures -v` - показать все фикстуры
 
+Пример использования фикстуры
+```python
+@pytest.fixture()
+def some_data():
+"""Return answer to ultimate question."""
+return 42
+
+def test_some_data(some_data):
+"""Use fixture return value in a test."""
+assert some_data == 42
+```
+
+1. Динамическая настройка фикстур
+```python
+@pytest.fixture(
+    scope="function",
+    params=["", "ar", "de", "es", "it"])
+def language(request):
+    return request.param
+# будет возвращаться последовательно при каждом новом запуске параметры ихз списка: "", "ar", "de" и т.д.
+```
+
 Пример фикстуры при инициализации драйвера:
 ```python
 import pytest
@@ -74,6 +96,7 @@ def driver(request):
     yield driver
     driver.quit()
 ```
+- `request` - Used to provide information on the executing test function. Most commonly used during fixture parametrization
 
 ### scope=""
 - `function` (по умолчанию): фикстура вызывается для каждого теста.
