@@ -56,6 +56,7 @@
 # ПОДГОТОВКА СРЕДЫ / УСТАНОВКА ПАКЕТОВ
 
 https://sites.google.com/chromium.org/driver/downloads
+https://googlechromelabs.github.io/chrome-for-testing/
 ссылка на драйвер для chrome
 
 - **python -m venv selenium_env** - Создадим виртуальное окружение selenium_env:
