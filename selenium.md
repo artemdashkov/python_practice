@@ -472,6 +472,7 @@ XPATH (XML Path Language) - это язык запросов к элемента
 //div[contains(text(), 'Частичный текст')]   # поиск по частичному совпадению текста, Пример: 
     # //p[@class="textCenter title404"][contains(text(), '404')]
     # //a[contains(@href, 'cryptocurrency-trading')]
+    # //a[contains(@class, "pagination_pagination__lllu8")]
 ```
 
 //элемент [содержит (@атрибут, ‘значение содержимого’) ] -синтаксис поиска по содержимому, используется когда у элемента прописано несколько классов
