@@ -298,6 +298,21 @@ for num in MyIterator(5):
 
 Генераторы создаются с помощью функций, использующих yield вместо return. Когда функция с yield вызывается, она возвращает объект-генератор и при этом сохраняет своё состояние, позволяя возобновить выполнение функции с того места, где она была остановлена.
 
+Пример:
+```python
+def get_list():
+    for x in [1, 2, 3, 4]:
+        yield x
+
+a = get_list()
+print(a)            >>> <generator object get_list at 0x000001C65052CB80>
+print(next(a))      >>> 1
+print(next(a))      >>> 2
+print(next(a))      >>> 3
+print(next(a))      >>> 4
+```
+
+
 ```python
 def count_up_to(max):  
     count = 1  
