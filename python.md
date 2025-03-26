@@ -1045,6 +1045,25 @@ file.write('Appending this line.')
 file.close()  
 ```
 
+### Работа с контекстным менеджером
+Лучший способ работы с файлами — использовать контекстный менеджер with, который автоматически закроет файл после завершения работы:
+```python
+with open('example.txt', 'r') as file:  
+    content = file.read()  
+    print(content)  
+```
+Вот пример программы, которая создаёт файл, записывает в него строки и читает их:
+```python
+# Запись в файл  
+with open('example.txt', 'w') as file:  
+    file.write('Первая строка\n')  
+    file.write('Вторая строка\n')  
+
+# Чтение из файла  
+with open('example.txt', 'r') as file:  
+    content = file.read()  
+    print(content)  
+```
 
 # allure
 ```python
