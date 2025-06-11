@@ -52,6 +52,7 @@
     - [Абстракция](#абстракция)
 	    - [@abstractmethod](#abstractmethod)
 	- [@dataclass](#dataclass)
+    - [@classmethod](#classmethod)
 	- [@staticmethod](#staticmethod)
     - [@Встроенные свойства](#Встроенные-свойства)
     - [@Магические методы](#Магические-методы)
@@ -1746,6 +1747,33 @@ print(random.randint(1, 100))  # И это может быть 61
 8. Другие полезные методы
     __call__(self, ...): Позволяет экземплярам класса вызываться как функции.
 
+#### Атрибуты класса
+Пример использования
+```python
+class Vector:
+    MIN_VALUE = 0
+    MAX_VALUE = 100
+
+    def __init__(self, x):
+        self.x = x
+
+vector_1 = Vector(1)
+vector_2 = Vector(2)
+
+print(vector_1.MIN_VALUE)
+print(vector_2.MIN_VALUE, "\n")
+
+vector_1.MIN_VALUE = 1
+
+print(vector_1.MIN_VALUE)
+print(vector_2.MIN_VALUE, "\n")
+
+Vector.MIN_VALUE = 10
+
+print(vector_1.MIN_VALUE)
+print(vector_2.MIN_VALUE, "\n")
+```
+
 #### __str__
 ```python
 class Person:  
@@ -1812,13 +1840,12 @@ class Cat(Animal):
         return "Meow"
 
 class Cow(Animal):
-    def __init__(self, name, weight):
+    def __init__(name, weight):
         Animal.__init__(self, name)  # super().__init__(name)
         self.weight = weight
     def speak(self):
         return "Moo"
 
-class 
 
 # Создаем экземпляры производных классов  
 dog = Dog("Rex")  
@@ -2025,11 +2052,33 @@ class Card:
         return asdict(self)
 ```
 
+## @classmethod
+Пример исопльзования
+```python
+class Vector:
+
+    MIN_COORD = 0
+    MAX_COORD = 100
+
+    @classmethod
+    def validate(cls, arg):     # validate - метод класса, cls - ссылка на текущий класс
+                                # метод класса работает исключительно с атрибутами класса
+                                # и не может обращаться к локальным атрибутам экземпляра класса
+                                # т.к. нет ссылки на объект (self), с которым он должен работать
+        return cls.MIN_COORD <= arg <= cls.MAX_COORD
+
+    def __init__(self, x, y):
+        self.x = self.y = 0
+        if self.validate(x) and self.validate(y): # можно было указать Vector.validate(x)
+            self.x = x
+            self.y = y
+        print(self.norm2(self.x, self.y))
+
+```
 
 ## @staticmethod
 `@staticmethod` в Python — это декоратор, который используется для определения статического метода внутри класса. 
-Статический метод не требует доступа к экземпляру класса (то есть объекту, созданному из этого класса) или к самому классу. 
-Он может быть вызван как через сам класс, так и через экземпляры класса.
+Статические методы не имеют доступа ни к атрибутам класса, ни к атрибутам его экземпляра. Обычно статические методы используются для удобства, чтобы связать функцию с тематикой класса метод можно вызывать и внутри обычных методов
 
 Вот основные особенности статических методов:
 1. Нет доступа к `self` и `cls`: Поскольку статический метод не привязан ни к экземпляру, ни к классу, он не принимает автоматически аргументы self (для экземпляра) или cls (для класса).
