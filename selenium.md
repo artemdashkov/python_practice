@@ -880,8 +880,8 @@ driver.switch_to.window(tabs[1]) # переключиться на вторую 
 **iframe** - это html-страница, внутри другой html-страницы.
 
 Методы:
-- `switch_to.frame()` - В качестве аргумента, он принимает WebElement, атрибут name или индекс нужного iframe.
-- `switch_to.default_content()` - Переключение с iframe обратно на страницу
+- `driver.switch_to.frame()` - В качестве аргумента, он принимает WebElement, атрибут name или индекс нужного iframe.
+- `driver.switch_to.default_content()` - Переключение с iframe обратно на страницу
 
 ```python
 iframe_volunteer = driver.find_element(By.XPATH, "//iframe")
