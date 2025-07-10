@@ -1045,18 +1045,23 @@ python3 --version # показывает версию python
 ```python
 apt install python3-pip # установка pip в линуксе
 pip3 --version	# проверить версию pip
-pip install -r requirements.txt		# установка зависимостей
+
 pip freeze	# просмотр зависимостей
 pip freeze > requirements.txt	# все зависимости скопировать в файл requirements.txt
-pip install pip-review  # Обновить всех пакетов в окружении
+
 pip3 list -перечень всех установленных библиотек
 pip help	# Справка по командам
 pip search “имя пакета”	# Поиск пакета
 pip show “имя пакета”	# Информация об пакете
-pip install “имя пакета”	# Установка пакета
+
 pip uninstall “имя пакета”	# Удаление пакета
 pip list	# Список установленных пакетов
+
+pip install pip-review  # Обновить всех пакетов в окружении
+pip install -r requirements.txt		# установка зависимостей
+pip install “имя пакета”	# Установка пакета
 pip install -U	# Обновление пакета
+pip install --upgrade requests # пример обновления пакета requests
 ```
 
 ## re
